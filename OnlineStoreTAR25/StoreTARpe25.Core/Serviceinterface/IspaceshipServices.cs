@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ShopTARpe25.Core.Serviceinterface
 {
-    internal class IshipServices
+    internal class IspaceshipServices
     {
     }
 }
