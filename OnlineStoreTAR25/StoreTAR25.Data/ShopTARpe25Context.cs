@@ -1,8 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using ShopTARpe25.Core.Domain;
 
 namespace ShopTARpe25.Data
 {
@@ -14,6 +12,8 @@ namespace ShopTARpe25.Data
         {
         }
         //teha DbSet, et saaks andmebaasi kasutada
-        //teha Core projecti alla Domaini nimega kaust ja sinna klass nimega Spaceship
+        //nimega Spaceship
+        public DbSet<SpaceShip> Spaceships { get; set; }
+
     }
 }
