@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShopTARpe25.Core.Domain
+﻿namespace ShopTARpe25.Models.Spaceship
 {
-    public class Spaceship
+    public class SpaceshipCreateViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -14,6 +10,5 @@ namespace ShopTARpe25.Core.Domain
         public int? EnginePower { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
-
     }
 }

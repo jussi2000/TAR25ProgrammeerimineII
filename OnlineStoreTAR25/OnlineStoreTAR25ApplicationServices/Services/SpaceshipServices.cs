@@ -6,7 +6,7 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.ApplicationServices.Services
 {
 
-    public class SpaceshipServices
+    public class SpaceshipServices : IspaceshipServices
     {
         private readonly ShopTARpe25Context _context;
 
@@ -17,10 +17,10 @@ namespace ShopTARpe25.ApplicationServices.Services
         {
             _context = context;
         }
-        public async Task<SpaceShip> Create(SpaceshipDto dto)
+        public async Task<Spaceship> Create(SpaceshipDto dto)
         {
 
-            SpaceShip domain = new();
+            Spaceship domain = new();
 
             domain.Id = dto.Id;
             domain.Name = dto.Name;
