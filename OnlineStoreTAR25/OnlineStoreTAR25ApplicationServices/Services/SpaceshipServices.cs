@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
+using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
 
 namespace ShopTARpe25.ApplicationServices.Services

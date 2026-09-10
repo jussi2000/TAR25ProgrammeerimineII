@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using ShopTARpe25.ApplicationServices.Services;
+using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Data;
+
 namespace OnlineStoreTAR25
 {
     public class Program
@@ -6,8 +11,18 @@ namespace OnlineStoreTAR25
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IspaceshipServices, SpaceshipServices>();
+
+            //ühendame andmebaasiga vvv
+            //selleks, et tuleb installida Microsoft.EntityFrameworkCore,SqlServer
+            //kuiinstallitud, siis tuleb viidata namespacesis Mircrosoft.EntityFrameworkCore
+            builder.Services.AddDbContext<ShopTARpe25Context>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
