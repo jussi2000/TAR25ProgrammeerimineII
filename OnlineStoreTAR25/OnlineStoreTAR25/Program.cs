@@ -22,7 +22,7 @@ namespace OnlineStoreTAR25
             //selleks, et tuleb installida Microsoft.EntityFrameworkCore,SqlServer
             //kuiinstallitud, siis tuleb viidata namespacesis Mircrosoft.EntityFrameworkCore
             builder.Services.AddDbContext<ShopTARpe25Context>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 

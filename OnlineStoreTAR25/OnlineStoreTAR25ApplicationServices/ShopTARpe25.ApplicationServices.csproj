@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StoreTAR25.Data\ShopTARpe25.Data.csproj" />
     <ProjectReference Include="..\StoreTARpe25.Core\ShopTARpe25.Core.csproj" />
   </ItemGroup>
