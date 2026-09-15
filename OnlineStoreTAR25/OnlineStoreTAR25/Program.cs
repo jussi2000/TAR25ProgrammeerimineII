@@ -9,6 +9,9 @@ namespace OnlineStoreTAR25
     {
         public static void Main(string[] args)
         {
+
+            //Update-Database: EntityFrameworkCore\Update-Database
+
             var builder = WebApplication.CreateBuilder(args);
 
 
