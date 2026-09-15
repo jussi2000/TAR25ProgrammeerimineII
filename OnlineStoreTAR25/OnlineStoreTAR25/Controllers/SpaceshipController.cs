@@ -32,7 +32,7 @@ namespace ShopTAR25.Controllers
         //kui kasutaja klikib "Create" nuppu, siis see meetod käivitatakse
         //tagastab kasutajale vormi, kuhu saab sisestada andmed
 
-        public IActionResult create()
+        public IActionResult Create()
         {
             return View();
         }

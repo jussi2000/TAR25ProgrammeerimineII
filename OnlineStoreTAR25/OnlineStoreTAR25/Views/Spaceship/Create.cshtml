@@ -1,46 +1,46 @@
 ﻿@model ShopTARpe25.Models.Spaceship.SpaceshipCreateViewModel
 
-<form>
-<div>
-    Spaceship Create
-</div>
-
-<div>
-    <label asp-for="Name" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-        <input asp-for="Name" class="form-control" />
+<form  method="post" enctype="multipart/form-data">
+    <div>
+        Spaceship Create
     </div>
-</div>
 
-<div>
-    <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-        <input asp-for="Classification" class="form-control" />
+    <div>
+        <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Name" class="form-control" />
+        </div>
     </div>
-</div>
 
-<div>
-    <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-        <input asp-for="BuildDate" class="form-control" />
+    <div>
+        <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Classification" class="form-control" />
+        </div>
     </div>
-</div>
 
-<div>
-    <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-        <input asp-for="Crew" class="form-control" />
+    <div>
+        <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="BuildDate" class="form-control" />
+        </div>
     </div>
-</div>
 
-<div>
-    <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
-    <div class="col-sm-10">
-        <input asp-for="EnginePower" class="form-control" />
+    <div>
+        <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Crew" class="form-control" />
+        </div>
     </div>
-</div>
 
-<input asp-action="Create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
-<a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to List</a>
+    <div>
+        <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="EnginePower" class="form-control" />
+        </div>
+    </div>
+
+    <input asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
+    <a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to List</a>
 
 </form>
