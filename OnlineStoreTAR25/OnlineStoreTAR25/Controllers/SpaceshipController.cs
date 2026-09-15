@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Data;
 using ShopTARpe25.Models.Spaceship;
 using System.Reflection.Metadata.Ecma335;
 
@@ -9,23 +10,38 @@ namespace ShopTAR25.Controllers
     public class SpaceshipController : Controller
     {
         private readonly IspaceshipServices _spaceshipService;
-
+        private readonly ShopTARpe25Context _context;
 
         //teha constructor et saaks kasutada teenust, mis on
         //defineeritud IspaceshipServices liideses
 
+        //lisage context juurde
         public SpaceshipController
             (
-                IspaceshipServices ispaceshipService
+                IspaceshipServices ispaceshipService,
+                ShopTARpe25Context context
+
             )
         {
-            _spaceshipService = ispaceshipService;  
+            _spaceshipService = ispaceshipService;
+            _context = context;
         }
 
 
         public IActionResult Index()
         {
-            return View();
+            //loome vaheinstantsi domaini ja viewModeli vahel.
+            var result = _context.Spaceships
+                .Select(x => new SpaceshipIndexViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Classification = x.Classification,
+                    BuildDate = x.BuildDate,
+                    Crew = x.Crew,
+                }).ToList(); // <-- See laeb andmed andmebaasist reaalselt sisse
+
+            return View(result); // <-- See saadab andmed Index.cshtml failile
         }
 
         [HttpGet]

@@ -1,8 +1,62 @@
-﻿@* nupu tegemine *@
+﻿@model IEnumerable<ShopTARpe25.Models.Spaceship.SpaceshipIndexViewModel>
 
+@* Nupu tegemine *@
 <div>
-    <a asp-action="Create" asp-controller="Spaceship" type="Sumbit" class="btn-primary">Create</a>
+    <a asp-action="Create"
+           asp-controller="Spaceship"
+           class="btn btn-primary">
+        Create
+    </a>
 </div>
 
-@* lõpp *@
+@* Loendi kuvamine *@
+<h2>Spaceships</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nr</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Built Date</th>
+            <th>Crew</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1; @* Alustame loendamist ühest *@
+        }
+        @foreach (var ship in Model)
+        {
+            <tr>
+                <td>@i</td> @* Kuvame järjekorranumbri *@
+                <td>@ship.Name</td>
+                <td>@ship.Classification</td>
+                <td>@ship.BuildDate</td>
+                <td>@ship.Crew</td>
+                <td>
+                    <a asp-action="Details"
+                           asp-route-id="@ship.Id"
+                           class="btn btn-primary">
+                        Details
+                    </a>
+
+                    <a asp-action="Edit"
+                           asp-route-id="@ship.Id"
+                           class="btn btn-primary">
+                        Update
+                    </a>
+
+                    <a asp-action="Delete"
+                           asp-route-id="@ship.Id"
+                           class="btn btn-outline-danger">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            i++;
+            @* Suurendame numbrit järgmise rea jaoks *@
+        }
+    </tbody>
+</table>
