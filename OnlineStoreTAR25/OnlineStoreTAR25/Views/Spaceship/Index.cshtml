@@ -12,7 +12,7 @@
 @* Loendi kuvamine *@
 <h2>Spaceships</h2>
 
-<table class="table">
+<table class="table"> @* iga tulba pealkirjad *@
     <thead>
         <tr>
             <th>Nr</th>
@@ -20,43 +20,36 @@
             <th>Type</th>
             <th>Built Date</th>
             <th>Crew</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         @{
-            int i = 1; @* Alustame loendamist ühest *@
+            int rownumber = 1; @* id Nr'id, loendus algab ühest *@
         }
         @foreach (var ship in Model)
         {
             <tr>
-                <td>@i</td> @* Kuvame järjekorranumbri *@
+                <td>@rownumber</td> @* järjekorranumber *@
                 <td>@ship.Name</td>
                 <td>@ship.Classification</td>
                 <td>@ship.BuildDate</td>
                 <td>@ship.Crew</td>
                 <td>
-                    <a asp-action="Details"
-                           asp-route-id="@ship.Id"
-                           class="btn btn-primary">
-                        Details
+                    @* Nupud: details, edit, delete vvv *@
+                    <a asp-action="Details"asp-route-id="@ship.Id"
+                           class="btn btn-warning">Details
                     </a>
 
-                    <a asp-action="Edit"
-                           asp-route-id="@ship.Id"
-                           class="btn btn-primary">
-                        Update
+                    <a asp-action="Edit"asp-route-id="@ship.Id"
+                           class="btn btn-primary">Update
                     </a>
 
-                    <a asp-action="Delete"
-                           asp-route-id="@ship.Id"
-                           class="btn btn-outline-danger">
-                        Delete
+                    <a asp-action="Delete"asp-route-id="@ship.Id"
+                        class="btn btn-danger">Delete
                     </a>
                 </td>
             </tr>
-            i++;
-            @* Suurendame numbrit järgmise rea jaoks *@
+            rownumber++; @* iga uus rida on +1 id number, ehk üks arv suurem *@
         }
     </tbody>
 </table>
