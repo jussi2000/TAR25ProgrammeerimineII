@@ -110,5 +110,57 @@ namespace ShopTAR25.Controllers
 
             return View(vm); 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+
+            var spaceship = await _spaceshipService.DetailsAsync(id);
+
+            //veakäsitlus
+            //suunab vatele NotFound, kui andmed ei ole
+            if (spaceship == null)
+            {
+                return NotFound();
+            }
+
+            //tuleb teha viewmodel ja see siin välja kutsuda
+            //ära map'ida vm ja doamin
+
+            var vm = new SpaceshipUpdateViewModel();
+
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Classification = spaceship.Classification;
+            vm.BuildDate = spaceship.BuildDate;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.Crew = spaceship.Crew;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
+        {
+            var dto = new SpaceshipDto()
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                Classification = vm.Classification,
+                BuildDate = vm.BuildDate,
+                EnginePower = vm.EnginePower,
+                Crew = vm.Crew,
+                CreatedAt = vm.CreatedAt,
+                ModifiedAt = vm.ModifiedAt
+            };
+            var result = await _spaceshipService.Update(dto);
+
+            if(result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

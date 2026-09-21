@@ -9,5 +9,7 @@ namespace ShopTARpe25.Core.Serviceinterface
 
         Task<Spaceship> DetailsAsync(Guid id);
 
+        Task<Spaceship> Update(SpaceshipDto id);
+
     }
 }
