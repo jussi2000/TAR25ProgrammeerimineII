@@ -81,12 +81,12 @@ namespace ShopTAR25.Controllers
         //tuleb teha details meetod
         //see kutsub välja interfacest service meetodi
 
-        [HttpGet] 
-        public async Task<IActionResult> Details(Guid id) 
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            
+
             var spaceship = await _spaceshipService.DetailsAsync(id);
-            
+
             //veakäsitlus
             //suunab vatele NotFound, kui andmed ei ole
             if (spaceship == null)
@@ -108,9 +108,9 @@ namespace ShopTAR25.Controllers
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
 
-            return View(vm); 
+            return View(vm);
         }
-
+        //UPDATE ------------------------------------------------------
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -156,11 +156,50 @@ namespace ShopTAR25.Controllers
             };
             var result = await _spaceshipService.Update(dto);
 
-            if(result == null)
+            if (result == null)
             {
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
+
         }
+
+        //DELETE -----------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var spaceship = await _spaceshipService.DetailsAsync(id);
+
+            if (spaceship == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new SpaceshipDeleteViewModel();
+
+            vm.Id = spaceship.Id;
+            vm.Name = spaceship.Name;
+            vm.Classification = spaceship.Classification;
+            vm.BuildDate = spaceship.BuildDate;
+            vm.EnginePower = spaceship.EnginePower;
+            vm.Crew = spaceship.Crew;
+            vm.CreatedAt = spaceship.CreatedAt;
+            vm.ModifiedAt = spaceship.ModifiedAt;
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmation(Guid id)
+        {
+            var result = await _spaceshipService.Delete(id);
+
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
 }

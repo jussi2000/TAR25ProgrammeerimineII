@@ -11,5 +11,7 @@ namespace ShopTARpe25.Core.Serviceinterface
 
         Task<Spaceship> Update(SpaceshipDto id);
 
+        Task<Spaceship> Delete(Guid id);
+
     }
 }
