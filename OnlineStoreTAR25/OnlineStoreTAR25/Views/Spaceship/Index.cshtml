@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopTARpe25.Models.Spaceship.SpaceshipIndexViewModel>
+@model IEnumerable<ShopTARpe25.Models.Spaceship.SpaceshipIndexViewModel>
 
 @* Nupu tegemine *@
 <div>
@@ -9,19 +9,19 @@
     </a>
 </div>
 
-<!--Test kindergarden branch-->
+<!--Kindergarden branch-->
 
 @* Loendi kuvamine *@
-<h2>Spaceships</h2>
+<h2>Kindergarten</h2>
 
 <table class="table"> @* iga tulba pealkirjad *@
     <thead>
         <tr>
             <th>Nr</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Built Date</th>
-            <th>Crew</th>
+            <th>GroupName</th>
+            <th>Children Count</th>
+            <th>Kindergarten Name</th>
+            <th>TeacherName</th>
         </tr>
     </thead>
     <tbody>
@@ -32,10 +32,10 @@
         {
             <tr>
                 <td>@rownumber</td> @* järjekorranumber *@
-                <td>@ship.Name</td>
-                <td>@ship.Classification</td>
-                <td>@ship.BuildDate</td>
-                <td>@ship.Crew</td>
+                <td>@ship.GroupName</td>
+                <td>@ship.ChildrenCount</td>
+                <td>@ship.KindergartenName</td>
+                <td>@ship.TeacherName</td>
                 <td>
                     @* Nupud: details, edit, delete vvv *@
                     <a asp-action="Details"asp-route-id="@ship.Id"

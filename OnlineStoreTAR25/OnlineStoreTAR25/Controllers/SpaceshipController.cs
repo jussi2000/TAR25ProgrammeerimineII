@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShopTARpe25.Core.Domain;
@@ -38,10 +38,10 @@ namespace ShopTAR25.Controllers
                 .Select(x => new SpaceshipIndexViewModel
                 {
                     Id = x.Id,
-                    Name = x.Name,
-                    Classification = x.Classification,
-                    BuildDate = x.BuildDate,
-                    Crew = x.Crew,
+                    GroupName = x.GroupName,
+                    ChildrenCount = x.ChildrenCount,
+                    KindergartenName = x.KindergartenName,
+                    TeacherName = x.TeacherName,
                 }).ToList(); // <-- See laeb andmed andmebaasist reaalselt sisse
 
             return View(result); // <-- See saadab andmed Index.cshtml failile
@@ -66,11 +66,10 @@ namespace ShopTAR25.Controllers
 
             var dto = new SpaceshipDto
             {
-                Name = vm.Name,
-                Classification = vm.Classification,
-                BuildDate = vm.BuildDate,
-                Crew = vm.Crew,
-                EnginePower = vm.EnginePower,
+                GroupName = vm.GroupName,
+                ChildrenCount = vm.ChildrenCount,
+                KindergartenName = vm.KindergartenName,
+                TeacherName = vm.TeacherName,
             };
 
             //kutsuda teenuse meetodit, mis salvestab andmed andmebaasi
@@ -100,13 +99,12 @@ namespace ShopTAR25.Controllers
             var vm = new SpaceshipDetailsViewModel();
 
             vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuildDate = spaceship.BuildDate;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.Crew = spaceship.Crew;
+            vm.GroupName = spaceship.GroupName;
+            vm.ChildrenCount = spaceship.ChildrenCount;
+            vm.KindergartenName = spaceship.KindergartenName;
+            vm.TeacherName = spaceship.TeacherName;
             vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.UpdatedAt = spaceship.UpdatedAt;
 
             return View(vm);
         }
@@ -130,13 +128,12 @@ namespace ShopTAR25.Controllers
             var vm = new SpaceshipUpdateViewModel();
 
             vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuildDate = spaceship.BuildDate;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.Crew = spaceship.Crew;
+            vm.GroupName = spaceship.GroupName;
+            vm.ChildrenCount = spaceship.ChildrenCount;
+            vm.KindergartenName = spaceship.KindergartenName;
+            vm.TeacherName = spaceship.TeacherName;
             vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.UpdatedAt = spaceship.UpdatedAt;
 
             return View(vm);
         }
@@ -146,13 +143,12 @@ namespace ShopTAR25.Controllers
             var dto = new SpaceshipDto()
             {
                 Id = vm.Id,
-                Name = vm.Name,
-                Classification = vm.Classification,
-                BuildDate = vm.BuildDate,
-                EnginePower = vm.EnginePower,
-                Crew = vm.Crew,
+                GroupName = vm.GroupName,
+                ChildrenCount = vm.ChildrenCount,
+                KindergartenName = vm.KindergartenName,
+                TeacherName = vm.TeacherName,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                UpdatedAt = vm.UpdatedAt
             };
             var result = await _spaceshipService.Update(dto);
 
@@ -178,13 +174,12 @@ namespace ShopTAR25.Controllers
             var vm = new SpaceshipDeleteViewModel();
 
             vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuildDate = spaceship.BuildDate;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.Crew = spaceship.Crew;
+            vm.GroupName = spaceship.GroupName;
+            vm.ChildrenCount = spaceship.ChildrenCount;
+            vm.KindergartenName = spaceship.KindergartenName;
+            vm.TeacherName = spaceship.TeacherName;
             vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.UpdatedAt = spaceship.UpdatedAt;
 
             return View(vm);
         }

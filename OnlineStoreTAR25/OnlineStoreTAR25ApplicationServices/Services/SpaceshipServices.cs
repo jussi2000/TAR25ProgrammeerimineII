@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Identity.Client;
 using ShopTARpe25.Core.Domain;
@@ -26,13 +26,12 @@ namespace ShopTARpe25.ApplicationServices.Services
             Spaceship domain = new();
 
             domain.Id = dto.Id;
-            domain.Name = dto.Name;
-            domain.Classification = dto.Classification;
-            domain.BuildDate = dto.BuildDate;
-            domain.Crew = dto.Crew;
-            domain.EnginePower = dto.EnginePower;
+            domain.GroupName = dto.GroupName;
+            domain.ChildrenCount = dto.ChildrenCount;
+            domain.KindergartenName = dto.KindergartenName;
+            domain.TeacherName = dto.TeacherName;
             domain.CreatedAt = DateTime.Now;
-            domain.ModifiedAt = DateTime.Now;
+            domain.UpdatedAt = DateTime.Now;
 
 
             //siia tuleb kood, mis salvestab domain
@@ -64,13 +63,12 @@ namespace ShopTARpe25.ApplicationServices.Services
             Spaceship spaceship = new();
 
             spaceship.Id = dto.Id;
-            spaceship.Name = dto.Name;
-            spaceship.Classification = dto.Classification;
-            spaceship.BuildDate = dto.BuildDate;
-            spaceship.Crew = dto.Crew;
-            spaceship.EnginePower = dto.EnginePower;
+            spaceship.GroupName = dto.GroupName;
+            spaceship.ChildrenCount = dto.ChildrenCount;
+            spaceship.KindergartenName = dto.KindergartenName;
+            spaceship.TeacherName = dto.TeacherName;
             spaceship.CreatedAt = dto.CreatedAt;
-            spaceship.ModifiedAt = DateTime.Now;
+            spaceship.UpdatedAt = DateTime.Now;
 
             _context.Spaceships.Update(spaceship);
             await _context.SaveChangesAsync();

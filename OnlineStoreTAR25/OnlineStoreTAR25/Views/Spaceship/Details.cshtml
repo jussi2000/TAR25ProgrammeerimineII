@@ -1,9 +1,9 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipDetailsViewModel
+@model ShopTARpe25.Models.Spaceship.SpaceshipDetailsViewModel
 
 <h1>Details</h1>
 
 <div>
-    <h4>Spaceships</h4>
+    <h4>Kindergarten</h4>
     <hr />
 
     <dl class="row">
@@ -15,36 +15,29 @@
 
         <dl class="row">
             <div class="form-group row">
-                <label asp-for="Name" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.Name)
+                <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(Model => Model.GroupName)
             </div>
         </dl>
 
         <dl class="row">
             <div class="form-group row">
-                <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.Classification)
+                <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(Model => Model.ChildrenCount)
             </div>
         </dl>
 
         <dl class="row">
             <div class="form-group row">
-                <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.BuildDate)
+                <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(Model => Model.KindergartenName)
             </div>
         </dl>
 
         <dl class="row">
             <div class="form-group row">
-                <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.Crew)
-            </div>
-        </dl>
-
-        <dl class="row">
-            <div class="form-group row">
-                <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.EnginePower)
+                <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(Model => Model.TeacherName)
             </div>
         </dl>
 
@@ -57,8 +50,8 @@
 
         <dl class="row">
             <div class="form-group row">
-                <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
-                @Html.DisplayFor(Model => Model.ModifiedAt)
+                <label asp-for="UpdatedAt" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(Model => Model.UpdatedAt)
             </div>
         </dl>
 

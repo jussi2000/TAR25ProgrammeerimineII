@@ -1,42 +1,35 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipCreateViewModel
+@model ShopTARpe25.Models.Spaceship.SpaceshipCreateViewModel
 
 <form  method="post" enctype="multipart/form-data">
     <div>
-        Spaceship Create
+        Kindergarten Create
     </div>
 
     <div>
-        <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+        <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="GroupName" class="form-control" />
         </div>
     </div>
 
     <div>
-        <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
+        <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Classification" class="form-control" />
+            <input asp-for="ChildrenCount" class="form-control" />
         </div>
     </div>
 
     <div>
-        <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
+        <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="BuildDate" class="form-control" />
+            <input asp-for="KindergartenName" class="form-control" />
         </div>
     </div>
 
     <div>
-        <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
+        <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Crew" class="form-control" />
-        </div>
-    </div>
-
-    <div>
-        <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="EnginePower" class="form-control" />
+            <input asp-for="TeacherName" class="form-control" />
         </div>
     </div>
 

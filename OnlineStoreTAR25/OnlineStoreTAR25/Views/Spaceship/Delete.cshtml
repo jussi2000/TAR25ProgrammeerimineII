@@ -1,9 +1,9 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipDeleteViewModel
+@model ShopTARpe25.Models.Spaceship.SpaceshipDeleteViewModel
 
 <h1>Delete</h1>
 
 <div>
-    <h4>Spaceship</h4>
+    <h4>Kindergarten</h4>
     <hr />
 
     <dl class="row">
@@ -15,36 +15,29 @@
 
     <dl class="row">
         <div class="form-group row">
-            <label asp-for="Name" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.Name)
+            <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.GroupName)
         </div>
     </dl>
 
     <dl class="row">
         <div class="form-group row">
-            <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.Classification)
+            <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.ChildrenCount)
         </div>
     </dl>
 
     <dl class="row">
         <div class="form-group row">
-            <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.BuildDate)
+            <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.KindergartenName)
         </div>
     </dl>
 
     <dl class="row">
         <div class="form-group row">
-            <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.Crew)
-        </div>
-    </dl>
-
-    <dl class="row">
-        <div class="form-group row">
-            <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.EnginePower)
+            <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.TeacherName)
         </div>
     </dl>
 
@@ -57,8 +50,8 @@
 
     <dl class="row">
         <div class="form-group row">
-            <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
-            @Html.DisplayFor(model => model.ModifiedAt)
+            <label asp-for="UpdatedAt" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.UpdatedAt)
         </div>
     </dl>
 

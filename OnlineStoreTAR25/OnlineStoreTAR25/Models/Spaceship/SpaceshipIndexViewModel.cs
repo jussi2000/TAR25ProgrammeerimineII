@@ -1,14 +1,13 @@
-﻿namespace ShopTARpe25.Models.Spaceship
+namespace ShopTARpe25.Models.Spaceship
 {
     public class SpaceshipIndexViewModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Classification { get; set; } = string.Empty;
-        public DateTime? BuildDate { get; set; }
-        public int? Crew { get; set; }
-        public int? EnginePower { get; set; }
+        public string GroupName { get; set; }
+        public int? ChildrenCount { get; set; }
+        public string KindergartenName { get; set; } = string.Empty;
+        public string TeacherName { get; set; } = string.Empty;
         public DateTime? CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
