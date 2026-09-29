@@ -24,7 +24,7 @@ namespace ShopTARpe25.ApplicationServices.Services
         }
         // See on constructor ------------- AAA
        //                                   |||
-       public void FilesToApi(SpaceshipDto dto, Spaceship doma)
+       public void FilesToApi(SpaceshipDto dto, Spaceship domain)
        {
             //kindlasti peab ankeedil olema üks fail 
             if(dto.Files != null && dto.Files.Count > 0)
@@ -50,7 +50,16 @@ namespace ShopTARpe25.ApplicationServices.Services
                         file.CopyTo(fileStream);
 
                         //domaini teha FileToApi
-                        FileToApi
+                        FileToApi path = new FileToApi
+                        {
+                            //tuleb ära mappida
+                            //domain ja ??
+                            Id = Guid.NewGuid(),
+                            ExistingFilePath = uniqueFileName,
+                            SpaceshipId = domain.Id
+                        };
+
+                        _context.fileToApis.AddAsync(path);
                     }
                 }
             }
