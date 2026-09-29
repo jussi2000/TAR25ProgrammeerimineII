@@ -1,6 +1,7 @@
-@model ShopTARpe25.Models.Spaceship.SpaceshipCreateViewModel
+@model ShopTARpe25.Models.Spaceship.KindergardenCreateViewModel
 
-<form  method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" asp-action="Create" asp-controller="Kindergarden">
+
     <div>
         Kindergarten Create
     </div>
@@ -33,7 +34,9 @@
         </div>
     </div>
 
-    <input asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
-    <a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to List</a>
+    <input asp-action="Create" asp-controller="Kindergarden" type="submit" class="btn btn-primary" value="Create" />
+
+    <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-secondary">Back to List</a>
+
 
 </form>

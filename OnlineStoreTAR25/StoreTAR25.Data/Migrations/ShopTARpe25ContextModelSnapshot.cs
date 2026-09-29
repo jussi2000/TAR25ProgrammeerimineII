@@ -22,7 +22,7 @@ namespace ShopTARpe25.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ShopTARpe25.Core.Domain.Spaceship", b =>
+            modelBuilder.Entity("ShopTARpe25.Core.Domain.Kindergarden", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

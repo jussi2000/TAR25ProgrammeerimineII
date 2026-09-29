@@ -1,9 +1,9 @@
-@model ShopTARpe25.Models.Spaceship.SpaceshipUpdateViewModel
+@model ShopTARpe25.Models.Spaceship.KindergardenUpdateViewModel
 
 <h1>Update</h1>
 
 <div>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" asp-action="Update" asp-controller="Kindergarden">
         <input asp-for="Id" type="hidden" />
         <input asp-for="CreatedAt" type="hidden" />
         <input asp-for="UpdatedAt" type="hidden" />
@@ -36,11 +36,10 @@
             </div>
         </div>
 
+        <input asp-action="Update" asp-controller="Kindergarden"
+               type="submit" class="btn btn-success" value="Update" />
 
-
-     <input asp-action="Update" asp-controller="spaceship" 
-     type="submit" class="btn btn-success" value="Update"/>
-
+        <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-secondary">Back to List</a>
 
     </form>
 </div>

@@ -20,7 +20,7 @@ namespace OnlineStoreTAR25
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped<IspaceshipServices, SpaceshipServices>();
+            builder.Services.AddScoped<IKindergardenServices, KindergardenServices>();
 
             //ühendame andmebaasiga vvv
             //selleks, et tuleb installida Microsoft.EntityFrameworkCore,SqlServer

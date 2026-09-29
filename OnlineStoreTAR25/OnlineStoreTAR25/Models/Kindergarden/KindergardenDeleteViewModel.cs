@@ -1,6 +1,6 @@
 namespace ShopTARpe25.Models.Spaceship
 {
-    public class SpaceshipUpdateViewModel
+    public class KindergardenDeleteViewModel
     {
         public Guid Id { get; set; }
         public string GroupName { get; set; }

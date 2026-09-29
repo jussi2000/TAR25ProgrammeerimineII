@@ -1,0 +1,66 @@
+@model ShopTARpe25.Models.Spaceship.KindergardenDeleteViewModel
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Kindergarten</h4>
+    <hr />
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="Id" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.Id)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.GroupName)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.ChildrenCount)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.KindergartenName)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.TeacherName)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="CreatedAt" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.CreatedAt)
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="form-group row">
+            <label asp-for="UpdatedAt" class="col-sm-2 col-form-label"></label>
+            @Html.DisplayFor(model => model.UpdatedAt)
+        </div>
+    </dl>
+
+    <hr />
+    <form asp-action="DeleteConfirmation" asp-controller="Kindergarden">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        
+        <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-success">Back</a>
+    </form>
+
+</div>

@@ -9,21 +9,21 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.ApplicationServices.Services
 {
 
-    public class SpaceshipServices : IspaceshipServices
+    public class KindergardenServices : IKindergardenServices
     {
         private readonly ShopTARpe25Context _context;
 
-        public SpaceshipServices
+        public KindergardenServices
             (
                 ShopTARpe25Context context
             )
         {
             _context = context;
         }
-        public async Task<Spaceship> Create(SpaceshipDto dto)
+        public async Task<Kindergarden> Create(KindergardenDto dto)
         {
 
-            Spaceship domain = new();
+            Kindergarden domain = new();
 
             domain.Id = dto.Id;
             domain.GroupName = dto.GroupName;
@@ -49,7 +49,7 @@ namespace ShopTARpe25.ApplicationServices.Services
 
         //siia teha uus meetod nimega DetailAsync
         //see ainult pärib andmed contextist
-        public async Task<Spaceship> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
+        public async Task<Kindergarden> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
         {
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -58,9 +58,9 @@ namespace ShopTARpe25.ApplicationServices.Services
 
         }
 
-        public async Task<Spaceship> Update(SpaceshipDto dto)
+        public async Task<Kindergarden> Update(KindergardenDto dto)
         {
-            Spaceship spaceship = new();
+            Kindergarden spaceship = new();
 
             spaceship.Id = dto.Id;
             spaceship.GroupName = dto.GroupName;
@@ -76,7 +76,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             return spaceship;
         }
         //DELETE ---------------------------------------------------
-        public async Task<Spaceship> Delete(Guid id)
+        public async Task<Kindergarden> Delete(Guid id)
         {
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);

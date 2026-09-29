@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ShopTARpe25.Core.Dto
+namespace ShopTARpe25.Core.Domain
 {
-    //Dto class on selleks et vahetada andemid
-    public class SpaceshipDto
+    public class Kindergarden
     {
         public Guid Id { get; set; }
         public string GroupName { get; set; }
@@ -14,5 +13,6 @@ namespace ShopTARpe25.Core.Dto
         public string TeacherName { get; set; } = string.Empty;
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
     }
 }

@@ -12,8 +12,8 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.Data.Migrations
 {
     [DbContext(typeof(ShopTARpe25Context))]
-    [Migration("20260925134039_KindergartenFields")]
-    partial class KindergartenFields
+    [Migration("20260929100426_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ShopTARpe25.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ShopTARpe25.Core.Domain.Spaceship", b =>
+            modelBuilder.Entity("ShopTARpe25.Core.Domain.Kindergarden", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

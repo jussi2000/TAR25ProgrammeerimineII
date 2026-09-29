@@ -13,7 +13,7 @@ namespace ShopTARpe25.Data
         }
         //teha DbSet, et saaks andmebaasi kasutada
         //nimega Spaceship
-        public DbSet<Spaceship> Spaceships { get; set; }
+        public DbSet<Kindergarden> Spaceships { get; set; }
 
     }
 }

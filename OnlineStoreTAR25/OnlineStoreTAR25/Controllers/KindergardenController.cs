@@ -10,18 +10,18 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace ShopTAR25.Controllers
 {
-    public class SpaceshipController : Controller
+    public class KindergardenController : Controller
     {
-        private readonly IspaceshipServices _spaceshipService;
+        private readonly IKindergardenServices _spaceshipService;
         private readonly ShopTARpe25Context _context;
 
         //teha constructor et saaks kasutada teenust, mis on
         //defineeritud IspaceshipServices liideses
 
         //lisage context juurde
-        public SpaceshipController
+        public KindergardenController
             (
-                IspaceshipServices ispaceshipService,
+                IKindergardenServices ispaceshipService,
                 ShopTARpe25Context context
 
             )
@@ -35,7 +35,7 @@ namespace ShopTAR25.Controllers
         {
             //loome vaheinstantsi domaini ja viewModeli vahel.
             var result = _context.Spaceships
-                .Select(x => new SpaceshipIndexViewModel
+                .Select(x => new KindergardenIndexViewModel
                 {
                     Id = x.Id,
                     GroupName = x.GroupName,
@@ -59,12 +59,12 @@ namespace ShopTAR25.Controllers
         //saadab andmed serverisse, kus need salvestatakse andmebaasi
 
         [HttpPost]
-        public async Task<IActionResult> Create(SpaceshipCreateViewModel vm)
+        public async Task<IActionResult> Create(KindergardenCreateViewModel vm)
         {
             //luua vaheinstants, mis sisaldab andmeid, mis on saadud vormist
             //need andmed tuleb edasi saata dto-sse, mis on mõeldud andmebaasi salvestamis
 
-            var dto = new SpaceshipDto
+            var dto = new KindergardenDto
             {
                 GroupName = vm.GroupName,
                 ChildrenCount = vm.ChildrenCount,
@@ -96,7 +96,7 @@ namespace ShopTAR25.Controllers
             //tuleb teha viewmodel ja see siin välja kutsuda
             //ära map'ida vm ja doamin
 
-            var vm = new SpaceshipDetailsViewModel();
+            var vm = new KindergardenDetailsViewModel();
 
             vm.Id = spaceship.Id;
             vm.GroupName = spaceship.GroupName;
@@ -125,7 +125,7 @@ namespace ShopTAR25.Controllers
             //tuleb teha viewmodel ja see siin välja kutsuda
             //ära map'ida vm ja doamin
 
-            var vm = new SpaceshipUpdateViewModel();
+            var vm = new KindergardenUpdateViewModel();
 
             vm.Id = spaceship.Id;
             vm.GroupName = spaceship.GroupName;
@@ -138,9 +138,9 @@ namespace ShopTAR25.Controllers
             return View(vm);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
+        public async Task<IActionResult> Update(KindergardenUpdateViewModel vm)
         {
-            var dto = new SpaceshipDto()
+            var dto = new KindergardenDto()
             {
                 Id = vm.Id,
                 GroupName = vm.GroupName,
@@ -171,7 +171,7 @@ namespace ShopTAR25.Controllers
                 return NotFound();
             }
 
-            var vm = new SpaceshipDeleteViewModel();
+            var vm = new KindergardenDeleteViewModel();
 
             vm.Id = spaceship.Id;
             vm.GroupName = spaceship.GroupName;
