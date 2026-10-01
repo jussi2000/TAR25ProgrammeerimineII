@@ -53,7 +53,9 @@ namespace ShopTAR25.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            SpaceshipCreateViewModel vm = new();
+
+            return View(vm);
         }
         //kui oled teinud vormi, siis see meetod käivitatakse
         //saadab andmed serverisse, kus need salvestatakse andmebaasi
@@ -71,6 +73,14 @@ namespace ShopTAR25.Controllers
                 BuildDate = vm.BuildDate,
                 Crew = vm.Crew,
                 EnginePower = vm.EnginePower,
+                Files = vm.Files,
+                FileToApiDtos = vm.Image
+                    .Select(file => new FileToApiDto
+                    {
+                        Id = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        SpaceshipId = file.Spaceshipid
+                    }).ToArray()
             };
 
             //kutsuda teenuse meetodit, mis salvestab andmed andmebaasi

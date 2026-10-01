@@ -12,7 +12,7 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.Data.Migrations
 {
     [DbContext(typeof(ShopTARpe25Context))]
-    [Migration("20260914102439_init")]
+    [Migration("20261001105742_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,6 +24,23 @@ namespace ShopTARpe25.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ShopTARpe25.Core.Domain.FileToApi", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExistingFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SpaceshipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileToApis");
+                });
 
             modelBuilder.Entity("ShopTARpe25.Core.Domain.Spaceship", b =>
                 {

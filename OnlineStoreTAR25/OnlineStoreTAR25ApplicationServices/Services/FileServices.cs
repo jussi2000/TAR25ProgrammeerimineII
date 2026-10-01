@@ -59,7 +59,9 @@ namespace ShopTARpe25.ApplicationServices.Services
                             SpaceshipId = domain.Id
                         };
 
-                        _context.fileToApis.AddAsync(path);
+                        _context.FileToApis.AddAsync(path);
+
+
                     }
                 }
             }
