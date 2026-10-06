@@ -1,9 +1,9 @@
 ﻿namespace ShopTARpe25.Models.Spaceship
 {
-    public class imageViewModel
+    public class ImageViewModel
     {
         public Guid ImageId { get; set; }
         public string? FilePath { get; set; }
-        public Guid? Spaceshipid { get; set; }
+        public Guid? SpaceshipId { get; set; }
     }
 }

@@ -22,8 +22,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             _context = context;
             _webHost = webHost;
         }
-        // See on constructor ------------- AAA
-       //                                   |||
+        // See public FileServices on constructor
        public void FilesToApi(SpaceshipDto dto, Spaceship domain)
        {
             //kindlasti peab ankeedil olema üks fail 
@@ -55,7 +54,7 @@ namespace ShopTARpe25.ApplicationServices.Services
                             //tuleb ära mappida
                             //domain ja ??
                             Id = Guid.NewGuid(),
-                            ExistingFilePath = uniqueFileName,
+                            ExistingFilePath =  uniqueFileName,
                             SpaceshipId = domain.Id
                         };
 

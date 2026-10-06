@@ -1,6 +1,10 @@
-﻿@model ShopTARpe25.Models.Spaceship.imageViewModel
+﻿@model ShopTARpe25.Models.Spaceship.ImageViewModel
+
+@{
+    var photoPaths = "~/multipleFileUpload/" + (Model.FilePath ?? "noimage.jpg");
+}
 
 <div class="form-group row col-sm-4 offset-2">
-    <div>@Model.FilePath</div>
-    <img src="@Model.FilePath" alt="Image" class="img-fluid"/>
+    @* <div>@Model.FilePath</div> *@
+    <img  src="@photoPaths" alt="Image" class="img-fluid" asp-append-version="true"/>
 </div>

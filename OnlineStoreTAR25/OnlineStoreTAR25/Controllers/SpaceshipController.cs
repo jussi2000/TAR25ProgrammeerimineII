@@ -79,8 +79,8 @@ namespace ShopTAR25.Controllers
                     .Select(file => new FileToApiDto
                     {
                         Id = file.ImageId,
-                        ExistingFilePath = file.FilePath,
-                        SpaceshipId = file.Spaceshipid
+                        ExistingFilePath = /*"/multipleFileUpload/" +*/ file.FilePath,
+                        SpaceshipId = file.SpaceshipId
                     }).ToArray()
             };
 
@@ -107,10 +107,11 @@ namespace ShopTAR25.Controllers
 
             var images = await _context.FileToApis
                 .Where(x => x.SpaceshipId == id)
-                .Select(y => new imageViewModel
+                .Select(y => new ImageViewModel
                 {
                     FilePath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    ImageId = y.Id,
+                    SpaceshipId = y.SpaceshipId
                 }).ToArrayAsync();
 
             //tuleb teha viewmodel ja see siin välja kutsuda
@@ -130,7 +131,7 @@ namespace ShopTAR25.Controllers
 
             return View(vm);
         }
-        //UPDATE ------------------------------------------------------
+        //UPDATE
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -184,7 +185,7 @@ namespace ShopTAR25.Controllers
 
         }
 
-        //DELETE -----------------------------------------------
+        //DELETE
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {

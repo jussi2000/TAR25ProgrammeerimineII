@@ -28,7 +28,7 @@ namespace ShopTARpe25.ApplicationServices.Services
 
             Spaceship domain = new();
 
-            domain.Id = dto.Id;
+            domain.Id = Guid.NewGuid();
             domain.Name = dto.Name;
             domain.Classification = dto.Classification;
             domain.BuildDate = dto.BuildDate;

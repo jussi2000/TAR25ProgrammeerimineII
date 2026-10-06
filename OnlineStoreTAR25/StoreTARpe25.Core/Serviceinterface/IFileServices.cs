@@ -5,6 +5,6 @@ namespace ShopTARpe25.Core.Serviceinterface
 {
     public interface IFileServices
     {
-        public void FilesToApi(SpaceshipDto dto, Spaceship domain);
+        void FilesToApi(SpaceshipDto dto, Spaceship domain);
     }
 }
