@@ -8,6 +8,8 @@
         public DateTime? BuildDate { get; set; }
         public int? Crew { get; set; }
         public int? EnginePower { get; set; }
+        public List<ImageViewModel> Images { get; set; }
+            = new List<ImageViewModel>();
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }
