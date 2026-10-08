@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
@@ -15,6 +16,7 @@ namespace ShopTAR25.Controllers
     {
         private readonly IspaceshipServices _spaceshipService;
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileService;
 
         //teha constructor et saaks kasutada teenust, mis on
         //defineeritud IspaceshipServices liideses
@@ -23,12 +25,14 @@ namespace ShopTAR25.Controllers
         public SpaceshipController
             (
                 IspaceshipServices ispaceshipService,
-                ShopTARpe25Context context
+                ShopTARpe25Context context,
+               IFileServices fileService
 
             )
         {
             _spaceshipService = ispaceshipService;
             _context = context;
+            _fileService = fileService;
         }
 
 
@@ -240,6 +244,22 @@ namespace ShopTAR25.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        {
+            var dto = new FileToApiDto()
+            {
+                //ainult id kaupa käib kustutamine
+                Id = vm.ImageId
+            };
+            var image = await _fileService.RemoveImageFromApi(dto);
 
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

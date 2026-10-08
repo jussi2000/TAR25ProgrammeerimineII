@@ -43,12 +43,18 @@
             </div>
         </div>
 
-            @foreach(var file in Model.Images)
+    @foreach(var file in Model.Images)
     {
          <br>
          <partial name="_Images" model="file" /> 
+         <br>
+         <input asp-action="removeImage" asp-controller="spaceship" 
+         asp-route-imageId="@file.ImageId" type="submit" class="btn btn-danger" 
+         value="Remove Image"/>
+         <br>
     }
 
+     <br>
      <input asp-action="Update" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Update"/>
      <a asp-action="Index" asp-controller="spaceship" type="submit" class="btn btn-basic">Back to List</a>
 
