@@ -178,7 +178,7 @@ namespace ShopTAR25.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
         {
-            var dto = new SpaceshipDto()
+            var dto = new SpaceshipDto
             {
                 Id = vm.Id,
                 Name = vm.Name,
@@ -186,8 +186,14 @@ namespace ShopTAR25.Controllers
                 BuildDate = vm.BuildDate,
                 EnginePower = vm.EnginePower,
                 Crew = vm.Crew,
-                CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                Files = vm.Files,
+                FileToApiDtos = vm.Images
+                    .Select(file => new FileToApiDto
+                    {
+                        Id = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                        SpaceshipId = file.SpaceshipId
+                    }).ToArray()
             };
             var result = await _spaceshipService.Update(dto);
 
