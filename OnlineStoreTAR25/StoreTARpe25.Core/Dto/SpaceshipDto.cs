@@ -5,7 +5,7 @@ namespace ShopTARpe25.Core.Dto
     //Dto class on selleks et vahetada andemid
     public class SpaceshipDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Classification { get; set; } = string.Empty;
         public DateTime? BuildDate { get; set; }

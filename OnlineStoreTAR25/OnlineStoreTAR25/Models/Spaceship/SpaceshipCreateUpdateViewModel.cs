@@ -1,8 +1,8 @@
 ﻿namespace ShopTARpe25.Models.Spaceship
 {
-    public class SpaceshipCreateViewModel
+    public class SpaceshipCreateUpdateViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Classification { get; set; } = string.Empty;
         public DateTime? BuildDate { get; set; }

@@ -1,4 +1,13 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipCreateViewModel
+﻿@model ShopTARpe25.Models.Spaceship.SpaceshipCreateUpdateViewModel
+
+@if (Model.Id.HasValue)
+{
+    <h1>Spaceship Update</h1>
+}
+else
+{
+    <h1>Spaceship Create</h1>
+}
 
 <form  method="post" enctype="multipart/form-data">
     <div>
