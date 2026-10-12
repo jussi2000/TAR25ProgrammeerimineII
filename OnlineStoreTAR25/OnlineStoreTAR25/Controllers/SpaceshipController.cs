@@ -47,7 +47,8 @@ namespace ShopTAR25.Controllers
                     Classification = x.Classification,
                     BuildDate = x.BuildDate,
                     Crew = x.Crew,
-                }).ToList(); // <-- See laeb andmed andmebaasist reaalselt sisse
+                    EnginePower = x.EnginePower
+                });
 
             return View(result); // <-- See saadab andmed Index.cshtml failile
         }
