@@ -61,7 +61,7 @@ namespace ShopTAR25.Controllers
         {
             SpaceshipCreateUpdateViewModel vm = new();
 
-            return View(vm);
+            return View("CreateUpdate",vm);
         }
         //kui oled teinud vormi, siis see meetod käivitatakse
         //saadab andmed serverisse, kus need salvestatakse andmebaasi
@@ -93,8 +93,14 @@ namespace ShopTAR25.Controllers
             //kutsuda teenuse meetodit, mis salvestab andmed andmebaasi
             var result = await _spaceshipService.Create(dto);
 
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             return RedirectToAction(nameof(Index));
         }
+
         //tuleb teha details meetod
         //see kutsub välja interfacest service meetodi
 
@@ -163,7 +169,7 @@ namespace ShopTAR25.Controllers
             //tuleb teha viewmodel ja see siin välja kutsuda
             //ära map'ida vm ja doamin
 
-            var vm = new SpaceshipUpdateViewModel();
+            var vm = new SpaceshipCreateUpdateViewModel();
 
             vm.Id = spaceship.Id;
             vm.Name = spaceship.Name;
@@ -173,9 +179,9 @@ namespace ShopTAR25.Controllers
             vm.Crew = spaceship.Crew;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
-            vm.Images.AddRange(images);
+            vm.Image.AddRange(images);
 
-            return View(vm);
+            return View("CreateUpdate",vm);
         }
         [HttpPost]
         public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)

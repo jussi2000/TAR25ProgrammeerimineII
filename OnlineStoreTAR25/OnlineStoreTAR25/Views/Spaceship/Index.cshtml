@@ -2,10 +2,7 @@
 
 @* Nupu tegemine *@
 <div>
-    <a asp-action="Create"
-           asp-controller="Spaceship"
-           class="btn btn-primary">
-        Create
+    <a asp-action="create" asp-controller="Spaceship" class="btn btn-primary">Create
     </a>
 </div>
 
@@ -38,17 +35,9 @@
                 <td>@ship.Crew</td>
                 <td>
                     @* Nupud: details, edit, delete vvv *@
-                    <a asp-action="Details"asp-route-id="@ship.Id"
-                           class="btn btn-warning">Details
-                    </a>
-
-                    <a asp-action="Update"asp-route-id="@ship.Id"
-                           class="btn btn-primary">Update
-                    </a>
-
-                    <a asp-action="Delete"asp-route-id="@ship.Id"
-                        class="btn btn-danger">Delete
-                    </a>
+                    <a asp-action="details"asp-route-id="@ship.Id" class="btn btn-warning">Details</a>
+                    <a asp-action="update"asp-route-id="@ship.Id" class="btn btn-primary">Update</a>
+                    <a asp-action="delete"asp-route-id="@ship.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
             rownumber++; @* iga uus rida on +1 id number, ehk üks arv suurem *@
