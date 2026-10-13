@@ -51,7 +51,7 @@ namespace ShopTARpe25.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Spaceships");
+                    b.ToTable("Kindergardens");
                 });
 #pragma warning restore 612, 618
         }

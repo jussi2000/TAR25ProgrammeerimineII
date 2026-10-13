@@ -40,7 +40,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             //defineeritud Core projectis
             //konstruktori kaudu tuleb injectida repository
 
-            await _context.Spaceships.AddAsync(domain);
+            await _context.Kindergardens.AddAsync(domain);
             await _context.SaveChangesAsync();
 
 
@@ -51,7 +51,7 @@ namespace ShopTARpe25.ApplicationServices.Services
         //see ainult pärib andmed contextist
         public async Task<Kindergarden> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
         {
-            var result = await _context.Spaceships
+            var result = await _context.Kindergardens
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
@@ -70,7 +70,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             spaceship.CreatedAt = dto.CreatedAt;
             spaceship.UpdatedAt = DateTime.Now;
 
-            _context.Spaceships.Update(spaceship);
+            _context.Kindergardens.Update(spaceship);
             await _context.SaveChangesAsync();
 
             return spaceship;
@@ -78,12 +78,12 @@ namespace ShopTARpe25.ApplicationServices.Services
         //DELETE ---------------------------------------------------
         public async Task<Kindergarden> Delete(Guid id)
         {
-            var result = await _context.Spaceships
+            var result = await _context.Kindergardens
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            _context.Spaceships.Remove(result);
+            _context.Kindergardens.Remove(result);
 
-            _context.Spaceships.Remove(result);
+            _context.Kindergardens.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;

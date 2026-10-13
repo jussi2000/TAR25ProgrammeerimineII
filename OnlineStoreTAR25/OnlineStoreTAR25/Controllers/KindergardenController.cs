@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
@@ -34,7 +35,7 @@ namespace ShopTAR25.Controllers
         public IActionResult Index()
         {
             //loome vaheinstantsi domaini ja viewModeli vahel.
-            var result = _context.Spaceships
+            var result = _context.Kindergardens
                 .Select(x => new KindergardenIndexViewModel
                 {
                     Id = x.Id,
@@ -84,7 +85,8 @@ namespace ShopTAR25.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
 
-            var spaceship = await _spaceshipService.DetailsAsync(id);
+            var spaceship = await _context.Kindergardens.FirstOrDefaultAsync(x => x.Id == id);
+
 
             //veakäsitlus
             //suunab vatele NotFound, kui andmed ei ole
