@@ -1,4 +1,4 @@
-@model ShopTARpe25.Models.Spaceship.KindergardenDeleteViewModel
+@model ShopTARpe25.Models.Kindergarden.KindergardenDeleteViewModel
 
 <h1>Delete</h1>
 
@@ -55,12 +55,29 @@
         </div>
     </dl>
 
+    @* Piltide kuvamise loogika *@
+    @if (Model.FilesToApiViewModels != null && Model.FilesToApiViewModels.Any())
+    {
+        <hr />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Images</label>
+            <div class="col-sm-10 d-flex flex-wrap gap-2">
+                @foreach (var file in Model.FilesToApiViewModels)
+                {
+                    <div class="card" style="width: 200px;">
+                        <img src="~/images/@file.FileUrl" class="card-img-top" alt="Lasteaia pilt" style="border: 1px solid #ddd; padding: 5px;" />
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <hr />
     <form asp-action="DeleteConfirmation" asp-controller="Kindergarden">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
         
-        <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-success">Back</a>
+        <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-success">Back to List</a>
     </form>
 
 </div>

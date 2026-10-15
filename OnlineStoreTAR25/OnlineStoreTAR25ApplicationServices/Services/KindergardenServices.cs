@@ -1,6 +1,5 @@
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Identity.Client;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
@@ -8,85 +7,89 @@ using ShopTARpe25.Data;
 
 namespace ShopTARpe25.ApplicationServices.Services
 {
-
     public class KindergardenServices : IKindergardenServices
     {
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileServices;
 
-        public KindergardenServices
-            (
-                ShopTARpe25Context context
-            )
+        public KindergardenServices(
+            ShopTARpe25Context context,
+            IFileServices fileServices)
         {
             _context = context;
+            _fileServices = fileServices;
         }
+
         public async Task<Kindergarden> Create(KindergardenDto dto)
         {
+            Kindergarden domain = new()
+            {
+                Id = Guid.NewGuid(),
+                GroupName = dto.GroupName,
+                ChildrenCount = dto.ChildrenCount,
+                KindergartenName = dto.KindergartenName,
+                TeacherName = dto.TeacherName,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
 
-            Kindergarden domain = new();
-
-            domain.Id = dto.Id;
-            domain.GroupName = dto.GroupName;
-            domain.ChildrenCount = dto.ChildrenCount;
-            domain.KindergartenName = dto.KindergartenName;
-            domain.TeacherName = dto.TeacherName;
-            domain.CreatedAt = DateTime.Now;
-            domain.UpdatedAt = DateTime.Now;
-
-
-            //siia tuleb kood, mis salvestab domain
-            //objecti andmebaasi
-            //tuleb kasutada repository'd, mis on
-            //defineeritud Core projectis
-            //konstruktori kaudu tuleb injectida repository
-
+            _fileServices.FilesToApi(dto, domain);
             await _context.Kindergardens.AddAsync(domain);
             await _context.SaveChangesAsync();
-
-
             return domain;
         }
 
-        //siia teha uus meetod nimega DetailAsync
-        //see ainult pärib andmed contextist
-        public async Task<Kindergarden> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
+        public async Task<Kindergarden?> DetailsAsync(Guid id)
         {
-            var result = await _context.Kindergardens
+            return await _context.Kindergardens
                 .FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-
         }
 
         public async Task<Kindergarden> Update(KindergardenDto dto)
         {
-            Kindergarden spaceship = new();
+            var domain = await _context.Kindergardens
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            spaceship.Id = dto.Id;
-            spaceship.GroupName = dto.GroupName;
-            spaceship.ChildrenCount = dto.ChildrenCount;
-            spaceship.KindergartenName = dto.KindergartenName;
-            spaceship.TeacherName = dto.TeacherName;
-            spaceship.CreatedAt = dto.CreatedAt;
-            spaceship.UpdatedAt = DateTime.Now;
+            if (domain == null)
+            {
+                return null!;
+            }
 
-            _context.Kindergardens.Update(spaceship);
+            domain.GroupName = dto.GroupName;
+            domain.ChildrenCount = dto.ChildrenCount;
+            domain.KindergartenName = dto.KindergartenName;
+            domain.TeacherName = dto.TeacherName;
+            domain.UpdatedAt = DateTime.Now;
+
+            _fileServices.FilesToApi(dto, domain);
             await _context.SaveChangesAsync();
-
-            return spaceship;
+            return domain;
         }
-        //DELETE ---------------------------------------------------
-        public async Task<Kindergarden> Delete(Guid id)
+
+        public async Task<Kindergarden?> Delete(Guid id)
         {
-            var result = await _context.Kindergardens
+            var domain = await _context.Kindergardens
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            _context.Kindergardens.Remove(result);
+            if (domain == null)
+            {
+                return null;
+            }
 
-            _context.Kindergardens.Remove(result);
+            var images = await _context.FileToApis
+                .Where(x => x.KindergardenId == id)
+                .Select(x => new FileToApiDto
+                {
+                    Id = x.Id,
+                    ExistingFilePath = x.ExistingFilePath,
+                    KindergardenId = x.KindergardenId
+                })
+                .ToArrayAsync();
+
+            await _fileServices.RemoveImagesFromApi(images);
+            _context.Kindergardens.Remove(domain);
             await _context.SaveChangesAsync();
-
-            return result;
+            return domain;
         }
     }
 }

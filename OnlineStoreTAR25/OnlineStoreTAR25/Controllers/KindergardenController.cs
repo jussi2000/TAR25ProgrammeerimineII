@@ -1,40 +1,31 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
 using ShopTARpe25.Models.Spaceship;
-using System.Reflection.Metadata.Ecma335;
 
 namespace ShopTAR25.Controllers
 {
     public class KindergardenController : Controller
     {
-        private readonly IKindergardenServices _spaceshipService;
+        private readonly IKindergardenServices _kindergardenService;
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileService;
 
-        //teha constructor et saaks kasutada teenust, mis on
-        //defineeritud IspaceshipServices liideses
-
-        //lisage context juurde
-        public KindergardenController
-            (
-                IKindergardenServices ispaceshipService,
-                ShopTARpe25Context context
-
-            )
+        public KindergardenController(
+            IKindergardenServices kindergardenService,
+            ShopTARpe25Context context,
+            IFileServices fileService)
         {
-            _spaceshipService = ispaceshipService;
+            _kindergardenService = kindergardenService;
             _context = context;
+            _fileService = fileService;
         }
-
 
         public IActionResult Index()
         {
-            //loome vaheinstantsi domaini ja viewModeli vahel.
             var result = _context.Kindergardens
                 .Select(x => new KindergardenIndexViewModel
                 {
@@ -42,107 +33,113 @@ namespace ShopTAR25.Controllers
                     GroupName = x.GroupName,
                     ChildrenCount = x.ChildrenCount,
                     KindergartenName = x.KindergartenName,
-                    TeacherName = x.TeacherName,
-                }).ToList(); // <-- See laeb andmed andmebaasist reaalselt sisse
+                    TeacherName = x.TeacherName
+                }).ToList();
 
-            return View(result); // <-- See saadab andmed Index.cshtml failile
+            return View(result);
         }
 
         [HttpGet]
-        //kui kasutaja klikib "Create" nuppu, siis see meetod käivitatakse
-        //tagastab kasutajale vormi, kuhu saab sisestada andmed
-
         public IActionResult Create()
         {
-            return View();
+            return View(new KindergardenCreateViewModel());
         }
-        //kui oled teinud vormi, siis see meetod käivitatakse
-        //saadab andmed serverisse, kus need salvestatakse andmebaasi
 
         [HttpPost]
-        public async Task<IActionResult> Create(KindergardenCreateViewModel vm)
+        public async Task<IActionResult> Create(
+            KindergardenCreateViewModel vm)
         {
-            //luua vaheinstants, mis sisaldab andmeid, mis on saadud vormist
-            //need andmed tuleb edasi saata dto-sse, mis on mõeldud andmebaasi salvestamis
-
             var dto = new KindergardenDto
             {
                 GroupName = vm.GroupName,
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
                 TeacherName = vm.TeacherName,
+                Files = vm.Files ?? new List<Microsoft.AspNetCore.Http.IFormFile>()
             };
 
-            //kutsuda teenuse meetodit, mis salvestab andmed andmebaasi
-            var result = await _spaceshipService.Create(dto);
+            await _kindergardenService.Create(dto);
 
             return RedirectToAction(nameof(Index));
         }
-        //tuleb teha details meetod
-        //see kutsub välja interfacest service meetodi
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
+            var kindergarden =
+                await _kindergardenService.DetailsAsync(id);
 
-            var spaceship = await _context.Kindergardens.FirstOrDefaultAsync(x => x.Id == id);
-
-
-            //veakäsitlus
-            //suunab vatele NotFound, kui andmed ei ole
-            if (spaceship == null)
+            if (kindergarden == null)
             {
                 return NotFound();
             }
 
-            //tuleb teha viewmodel ja see siin välja kutsuda
-            //ära map'ida vm ja doamin
+            var images = await _context.FileToApis
+                .Where(x => x.KindergardenId == id)
+                .Select(x => new ImageViewModel
+                {
+                    FilePath = x.ExistingFilePath,
+                    ImageId = x.Id,
+                    KindergardenId = x.KindergardenId
+                }).ToArrayAsync();
 
-            var vm = new KindergardenDetailsViewModel();
+            var vm = new KindergardenDetailsViewModel
+            {
+                Id = kindergarden.Id,
+                GroupName = kindergarden.GroupName,
+                ChildrenCount = kindergarden.ChildrenCount,
+                KindergartenName = kindergarden.KindergartenName,
+                TeacherName = kindergarden.TeacherName,
+                CreatedAt = kindergarden.CreatedAt,
+                UpdatedAt = kindergarden.UpdatedAt
+            };
 
-            vm.Id = spaceship.Id;
-            vm.GroupName = spaceship.GroupName;
-            vm.ChildrenCount = spaceship.ChildrenCount;
-            vm.KindergartenName = spaceship.KindergartenName;
-            vm.TeacherName = spaceship.TeacherName;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.UpdatedAt = spaceship.UpdatedAt;
+            vm.Images.AddRange(images);
 
             return View(vm);
         }
-        //UPDATE ------------------------------------------------------
+
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
+            var kindergarden =
+                await _kindergardenService.DetailsAsync(id);
 
-            var spaceship = await _spaceshipService.DetailsAsync(id);
-
-            //veakäsitlus
-            //suunab vatele NotFound, kui andmed ei ole
-            if (spaceship == null)
+            if (kindergarden == null)
             {
                 return NotFound();
             }
 
-            //tuleb teha viewmodel ja see siin välja kutsuda
-            //ära map'ida vm ja doamin
+            var images = await _context.FileToApis
+                .Where(x => x.KindergardenId == id)
+                .Select(x => new ImageViewModel
+                {
+                    FilePath = x.ExistingFilePath,
+                    ImageId = x.Id,
+                    KindergardenId = x.KindergardenId
+                }).ToArrayAsync();
 
-            var vm = new KindergardenUpdateViewModel();
+            var vm = new KindergardenUpdateViewModel
+            {
+                Id = kindergarden.Id,
+                GroupName = kindergarden.GroupName,
+                ChildrenCount = kindergarden.ChildrenCount,
+                KindergartenName = kindergarden.KindergartenName,
+                TeacherName = kindergarden.TeacherName,
+                CreatedAt = kindergarden.CreatedAt,
+                UpdatedAt = kindergarden.UpdatedAt
+            };
 
-            vm.Id = spaceship.Id;
-            vm.GroupName = spaceship.GroupName;
-            vm.ChildrenCount = spaceship.ChildrenCount;
-            vm.KindergartenName = spaceship.KindergartenName;
-            vm.TeacherName = spaceship.TeacherName;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.UpdatedAt = spaceship.UpdatedAt;
+            vm.Images.AddRange(images);
 
             return View(vm);
         }
+
         [HttpPost]
-        public async Task<IActionResult> Update(KindergardenUpdateViewModel vm)
+        public async Task<IActionResult> Update(
+            KindergardenUpdateViewModel vm)
         {
-            var dto = new KindergardenDto()
+            var dto = new KindergardenDto
             {
                 Id = vm.Id,
                 GroupName = vm.GroupName,
@@ -150,53 +147,80 @@ namespace ShopTAR25.Controllers
                 KindergartenName = vm.KindergartenName,
                 TeacherName = vm.TeacherName,
                 CreatedAt = vm.CreatedAt,
-                UpdatedAt = vm.UpdatedAt
+                UpdatedAt = vm.UpdatedAt,
+                Files = vm.Files ?? new List<Microsoft.AspNetCore.Http.IFormFile>(),
+                FileToApiDtos = vm.Images
+                    .Select(image => new FileToApiDto
+                    {
+                        Id = image.ImageId,
+                        ExistingFilePath = image.FilePath,
+                        KindergardenId = image.KindergardenId
+                    }).ToArray()
             };
-            var result = await _spaceshipService.Update(dto);
 
-            if (result == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            await _kindergardenService.Update(dto);
+
             return RedirectToAction(nameof(Index));
-
         }
 
-        //DELETE -----------------------------------------------
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var spaceship = await _spaceshipService.DetailsAsync(id);
+            var kindergarden =
+                await _kindergardenService.DetailsAsync(id);
 
-            if (spaceship == null)
+            if (kindergarden == null)
             {
                 return NotFound();
             }
 
-            var vm = new KindergardenDeleteViewModel();
+            var images = await _context.FileToApis
+                .Where(x => x.KindergardenId == id)
+                .Select(x => new ImageViewModel
+                {
+                    FilePath = x.ExistingFilePath,
+                    ImageId = x.Id,
+                    KindergardenId = x.KindergardenId
+                }).ToArrayAsync();
 
-            vm.Id = spaceship.Id;
-            vm.GroupName = spaceship.GroupName;
-            vm.ChildrenCount = spaceship.ChildrenCount;
-            vm.KindergartenName = spaceship.KindergartenName;
-            vm.TeacherName = spaceship.TeacherName;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.UpdatedAt = spaceship.UpdatedAt;
+            var vm = new KindergardenDeleteViewModel
+            {
+                Id = kindergarden.Id,
+                GroupName = kindergarden.GroupName,
+                ChildrenCount = kindergarden.ChildrenCount,
+                KindergartenName = kindergarden.KindergartenName,
+                TeacherName = kindergarden.TeacherName,
+                CreatedAt = kindergarden.CreatedAt,
+                UpdatedAt = kindergarden.UpdatedAt
+            };
+
+            vm.Images.AddRange(images);
 
             return View(vm);
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
-            var result = await _spaceshipService.Delete(id);
+            await _kindergardenService.Delete(id);
 
-            if (id == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
             return RedirectToAction(nameof(Index));
-
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(
+            Guid imageId,
+            Guid kindergardenId)
+        {
+            await _fileService.RemoveImageFromApi(
+                new FileToApiDto
+                {
+                    Id = imageId
+                });
+
+            return RedirectToAction(
+                nameof(Update),
+                new { id = kindergardenId });
+        }
     }
 }

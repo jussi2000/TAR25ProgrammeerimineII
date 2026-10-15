@@ -1,3 +1,4 @@
+
 namespace ShopTARpe25.Models.Spaceship
 {
     public class KindergardenDetailsViewModel
@@ -7,6 +8,7 @@ namespace ShopTARpe25.Models.Spaceship
         public int? ChildrenCount { get; set; }
         public string KindergartenName { get; set; } = string.Empty;
         public string TeacherName { get; set; } = string.Empty;
+        public List<ImageViewModel> Images { get; set; } = new();
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
