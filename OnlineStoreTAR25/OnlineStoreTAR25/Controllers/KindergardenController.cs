@@ -6,11 +6,11 @@ using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
 using ShopTARpe25.Models.Kindergarden;
-using ShopTARpe25.Models.Kindergarden;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
+
 namespace ShopTARpe25.Controllers
 {
     public class KindergardenController : Controller
@@ -211,7 +211,9 @@ namespace ShopTARpe25.Controllers
                 _context.FilesToApi.Remove(image);
                 await _context.SaveChangesAsync();
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", image.FileUrl);
+                string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "multipleFileUpload");
+                string path = Path.Combine(uploadDir, image.FileUrl);
+
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);

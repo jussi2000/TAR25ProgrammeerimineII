@@ -21,7 +21,7 @@ namespace ShopTARpe25.ApplicationServices.Services
         {
             if (dto.File != null)
             {
-                string uploadsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "wwwroot", "images");
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "multipleFileUpload");
 
                 if (!Directory.Exists(uploadsFolder))
                 {

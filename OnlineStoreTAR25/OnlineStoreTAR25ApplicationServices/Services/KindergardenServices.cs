@@ -37,6 +37,12 @@ namespace ShopTARpe25.ApplicationServices.Services
                 KindergartenName = dto.KindergartenName ?? "Määramata lasteaed",
                 TeacherName = dto.TeacherName ?? "Määramata õpetaja"
             };
+
+            // 1. Salvestame kirje KÕIGEPEALT andmebaasi, et ID oleks olemas
+            await _context.RealEstates.AddAsync(realEstateDomain);
+            await _context.SaveChangesAsync();
+
+            // 2. Nüüd on turvaline pilte üles laadida, kuna vanemkirje on andmebaasis loodud
             if (dto.Files != null)
             {
                 foreach (var file in dto.Files)
@@ -49,10 +55,6 @@ namespace ShopTARpe25.ApplicationServices.Services
                     await _fileServices.UploadFilesToApi(fileDto);
                 }
             }
-
-
-            await _context.RealEstates.AddAsync(realEstateDomain);
-            await _context.SaveChangesAsync();
 
             return domain;
         }
@@ -84,6 +86,7 @@ namespace ShopTARpe25.ApplicationServices.Services
                 realEstate.KindergartenName = dto.KindergartenName ?? "Määramata lasteaed";
                 realEstate.TeacherName = dto.TeacherName ?? "Määramata õpetaja";
                 realEstate.UpdatedAt = DateTime.Now;
+
                 if (dto.Files != null)
                 {
                     foreach (var file in dto.Files)
@@ -96,8 +99,6 @@ namespace ShopTARpe25.ApplicationServices.Services
                         await _fileServices.UploadFilesToApi(fileDto);
                     }
                 }
-
-
 
                 _context.RealEstates.Update(realEstate);
                 await _context.SaveChangesAsync();
