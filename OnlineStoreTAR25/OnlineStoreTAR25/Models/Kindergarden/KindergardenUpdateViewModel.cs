@@ -15,6 +15,6 @@ namespace ShopTARpe25.Models.Kindergarden
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<IFormFile> Files { get; set; } = new List<IFormFile>();
-        public List<ImageViewModel> FilesToApiViewModels { get; set; } = new List<ImageViewModel>();
+        public List<FileToApiViewModel> FilesToApiViewModels { get; set; } = new List<FileToApiViewModel>();
     }
 }
