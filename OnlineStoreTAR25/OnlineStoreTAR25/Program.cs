@@ -18,7 +18,7 @@ namespace OnlineStoreTAR25
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IFileServices, FileServices>();
-            builder.Services.AddScoped<IKindergardenServices, KindergardenServices>(); // LISATUD: Lasteaia teenuse registreerimine
+            builder.Services.AddScoped<IKindergardenServices, KindergardenServices>();
 
             builder.Services.AddDbContext<ShopTARpe25Context>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -12,7 +12,7 @@ namespace ShopTARpe25.Data
         }
 
         public DbSet<Kindergarden> Kindergardens { get; set; }
-        public DbSet<ExistingFilePath> ExistingFilePath { get; set; }
+        public DbSet<RealEstate> RealEstates { get; set; }
         public DbSet<FileToApi> FilesToApi { get; set; }
     }
 }

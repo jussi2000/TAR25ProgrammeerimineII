@@ -5,7 +5,6 @@ using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
 using System;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace ShopTARpe25.ApplicationServices.Services
 {

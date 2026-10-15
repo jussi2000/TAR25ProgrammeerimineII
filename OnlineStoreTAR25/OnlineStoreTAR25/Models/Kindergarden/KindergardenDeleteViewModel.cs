@@ -1,5 +1,4 @@
 using ShopTARpe25.Models.Kindergarden;
-using ShopTARpe25.Models.Kindergarden;
 using System;
 using System.Collections.Generic;
 
