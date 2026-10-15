@@ -28,13 +28,11 @@
                     <input asp-for="TeacherName" class="form-control" />
                 </div>
 
-                @* Failide valimise väli piltide üleslaadimiseks *@
                 <div class="form-group mb-3">
                     <label asp-for="Files" class="col-form-label">Upload images</label>
                     <input asp-for="Files" type="file" class="form-control" multiple />
                 </div>
 
-                @* Nuppude plokk korrektse vahega *@
                 <div class="mt-4">
                     <input asp-action="Create" asp-controller="Kindergarden" type="submit" class="btn btn-primary me-2" value="Create" />
                     <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-secondary">Back to List</a>

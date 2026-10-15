@@ -55,7 +55,6 @@
         </div>
     </dl>
 
-    @* Piltide kuvamise loogika *@
     @if (Model.FilesToApiViewModels != null && Model.FilesToApiViewModels.Any())
     {
         <hr />
@@ -76,7 +75,7 @@
     <form asp-action="DeleteConfirmation" asp-controller="Kindergarden">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        
+
         <a asp-action="Index" asp-controller="Kindergarden" class="btn btn-success">Back to List</a>
     </form>
 

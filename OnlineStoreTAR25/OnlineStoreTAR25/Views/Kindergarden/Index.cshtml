@@ -1,4 +1,4 @@
-@model IEnumerable<ShopTARpe25.Models.Spaceship.KindergardenIndexViewModel>
+@model IEnumerable<ShopTARpe25.Models.Kindergarden.KindergardenIndexViewModel>
 
 @* Nupu tegemine *@
 <div>
@@ -27,18 +27,17 @@
     </thead>
     <tbody>
         @{
-            int rownumber = 1; @* id Nr'id, loendus algab ühest *@
+            int rownumber = 1;
         }
         @foreach (var ship in Model)
         {
             <tr>
-                <td>@rownumber</td> @* järjekorranumber *@
+                <td>@rownumber</td>
                 <td>@ship.GroupName</td>
                 <td>@ship.ChildrenCount</td>
                 <td>@ship.KindergartenName</td>
                 <td>@ship.TeacherName</td>
                 <td>
-                    @* Nupud: details, edit, delete vvv *@
                     <a asp-action="Details"
                            asp-controller="Kindergarden"
                            asp-route-id="@ship.Id"
@@ -62,7 +61,6 @@
                 </td>
             </tr>
             rownumber++;
-            @* iga uus rida on +1 id number, ehk üks arv suurem *@
         }
     </tbody>
 </table>

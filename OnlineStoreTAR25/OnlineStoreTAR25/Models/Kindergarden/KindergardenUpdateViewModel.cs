@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Http;
+using ShopTARpe25.Models.Kindergarden;
+using System;
+using System.Collections.Generic;
 
-namespace ShopTARpe25.Models.Spaceship
+namespace ShopTARpe25.Models.Kindergarden
 {
     public class KindergardenUpdateViewModel
     {
@@ -8,9 +12,9 @@ namespace ShopTARpe25.Models.Spaceship
         public int? ChildrenCount { get; set; }
         public string KindergartenName { get; set; } = string.Empty;
         public string TeacherName { get; set; } = string.Empty;
-        public List<IFormFile> Files { get; set; } = new();
-        public List<ImageViewModel> Images { get; set; } = new();
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
+        public List<ImageViewModel> FilesToApiViewModels { get; set; } = new List<ImageViewModel>();
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-namespace ShopTARpe25.Models.Spaceship
+namespace ShopTARpe25.Models.Kindergarden
 {
     public class ImageViewModel
     {

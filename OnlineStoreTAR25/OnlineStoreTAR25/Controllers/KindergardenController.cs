@@ -1,40 +1,47 @@
-
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
-using ShopTARpe25.Models.Spaceship;
-
-namespace ShopTAR25.Controllers
+using ShopTARpe25.Models.Kindergarden;
+using ShopTARpe25.Models.Kindergarden;
+using System;
+using System.Threading.Tasks;
+using System.Linq;
+using System.IO;
+namespace ShopTARpe25.Controllers
 {
     public class KindergardenController : Controller
     {
         private readonly IKindergardenServices _kindergardenService;
         private readonly ShopTARpe25Context _context;
-        private readonly IFileServices _fileService;
 
-        public KindergardenController(
-            IKindergardenServices kindergardenService,
-            ShopTARpe25Context context,
-            IFileServices fileService)
+        public KindergardenController
+            (
+                IKindergardenServices ikindergardenService,
+                ShopTARpe25Context context
+            )
         {
-            _kindergardenService = kindergardenService;
+            _kindergardenService = ikindergardenService;
             _context = context;
-            _fileService = fileService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _context.Kindergardens
-                .Select(x => new KindergardenIndexViewModel
-                {
-                    Id = x.Id,
-                    GroupName = x.GroupName,
-                    ChildrenCount = x.ChildrenCount,
-                    KindergartenName = x.KindergartenName,
-                    TeacherName = x.TeacherName
-                }).ToList();
+            var realEstatesData = await _context.RealEstates.ToListAsync();
+
+            var result = realEstatesData.Select(x => new KindergardenIndexViewModel
+            {
+                Id = x.Id,
+                GroupName = x.Address,
+                ChildrenCount = x.ChildrenCount,
+                KindergartenName = x.KindergartenName,
+                TeacherName = x.TeacherName,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt
+            }).ToList();
 
             return View(result);
         }
@@ -42,12 +49,11 @@ namespace ShopTAR25.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new KindergardenCreateViewModel());
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(
-            KindergardenCreateViewModel vm)
+        public async Task<IActionResult> Create(KindergardenCreateViewModel vm)
         {
             var dto = new KindergardenDto
             {
@@ -55,7 +61,9 @@ namespace ShopTAR25.Controllers
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
                 TeacherName = vm.TeacherName,
-                Files = vm.Files ?? new List<Microsoft.AspNetCore.Http.IFormFile>()
+                Files = vm.Files,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             await _kindergardenService.Create(dto);
@@ -66,35 +74,33 @@ namespace ShopTAR25.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var kindergarden =
-                await _kindergardenService.DetailsAsync(id);
+            var dbRealEstate = await _context.RealEstates.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (kindergarden == null)
+            if (dbRealEstate == null)
             {
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergardenId == id)
-                .Select(x => new ImageViewModel
+            var images = await _context.FilesToApi
+                .Where(x => x.RealEstateId == id)
+                .Select(x => new FileToApiViewModel
                 {
-                    FilePath = x.ExistingFilePath,
                     ImageId = x.Id,
-                    KindergardenId = x.KindergardenId
-                }).ToArrayAsync();
+                    FileUrl = x.FileUrl,
+                    RealEstateId = x.RealEstateId
+                }).ToListAsync();
 
             var vm = new KindergardenDetailsViewModel
             {
-                Id = kindergarden.Id,
-                GroupName = kindergarden.GroupName,
-                ChildrenCount = kindergarden.ChildrenCount,
-                KindergartenName = kindergarden.KindergartenName,
-                TeacherName = kindergarden.TeacherName,
-                CreatedAt = kindergarden.CreatedAt,
-                UpdatedAt = kindergarden.UpdatedAt
+                Id = dbRealEstate.Id,
+                GroupName = dbRealEstate.Address,
+                ChildrenCount = dbRealEstate.ChildrenCount,
+                KindergartenName = dbRealEstate.KindergartenName,
+                TeacherName = dbRealEstate.TeacherName,
+                CreatedAt = dbRealEstate.CreatedAt,
+                UpdatedAt = dbRealEstate.UpdatedAt,
+                FilesToApiViewModels = images
             };
-
-            vm.Images.AddRange(images);
 
             return View(vm);
         }
@@ -102,60 +108,50 @@ namespace ShopTAR25.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var kindergarden =
-                await _kindergardenService.DetailsAsync(id);
+            var dbRealEstate = await _context.RealEstates.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (kindergarden == null)
+            if (dbRealEstate == null)
             {
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergardenId == id)
-                .Select(x => new ImageViewModel
+            var images = await _context.FilesToApi
+                .Where(x => x.RealEstateId == id)
+                .Select(x => new FileToApiViewModel
                 {
-                    FilePath = x.ExistingFilePath,
                     ImageId = x.Id,
-                    KindergardenId = x.KindergardenId
-                }).ToArrayAsync();
+                    FileUrl = x.FileUrl,
+                    RealEstateId = x.RealEstateId
+                }).ToListAsync();
 
             var vm = new KindergardenUpdateViewModel
             {
-                Id = kindergarden.Id,
-                GroupName = kindergarden.GroupName,
-                ChildrenCount = kindergarden.ChildrenCount,
-                KindergartenName = kindergarden.KindergartenName,
-                TeacherName = kindergarden.TeacherName,
-                CreatedAt = kindergarden.CreatedAt,
-                UpdatedAt = kindergarden.UpdatedAt
+                Id = dbRealEstate.Id,
+                GroupName = dbRealEstate.Address,
+                ChildrenCount = dbRealEstate.ChildrenCount,
+                KindergartenName = dbRealEstate.KindergartenName,
+                TeacherName = dbRealEstate.TeacherName,
+                CreatedAt = dbRealEstate.CreatedAt,
+                UpdatedAt = dbRealEstate.UpdatedAt,
+                FilesToApiViewModels = images
             };
-
-            vm.Images.AddRange(images);
 
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(
-            KindergardenUpdateViewModel vm)
+        public async Task<IActionResult> Update(KindergardenUpdateViewModel vm)
         {
             var dto = new KindergardenDto
             {
                 Id = vm.Id,
                 GroupName = vm.GroupName,
-                ChildrenCount = vm.ChildrenCount,
+                ChildrenCount = vm.ChildrenCount ?? 0,
                 KindergartenName = vm.KindergartenName,
                 TeacherName = vm.TeacherName,
-                CreatedAt = vm.CreatedAt,
-                UpdatedAt = vm.UpdatedAt,
-                Files = vm.Files ?? new List<Microsoft.AspNetCore.Http.IFormFile>(),
-                FileToApiDtos = vm.Images
-                    .Select(image => new FileToApiDto
-                    {
-                        Id = image.ImageId,
-                        ExistingFilePath = image.FilePath,
-                        KindergardenId = image.KindergardenId
-                    }).ToArray()
+                Files = vm.Files,
+                CreatedAt = vm.CreatedAt ?? DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             await _kindergardenService.Update(dto);
@@ -166,35 +162,33 @@ namespace ShopTAR25.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var kindergarden =
-                await _kindergardenService.DetailsAsync(id);
+            var dbRealEstate = await _context.RealEstates.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (kindergarden == null)
+            if (dbRealEstate == null)
             {
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergardenId == id)
-                .Select(x => new ImageViewModel
+            var images = await _context.FilesToApi
+                .Where(x => x.RealEstateId == id)
+                .Select(x => new FileToApiViewModel
                 {
-                    FilePath = x.ExistingFilePath,
                     ImageId = x.Id,
-                    KindergardenId = x.KindergardenId
-                }).ToArrayAsync();
+                    FileUrl = x.FileUrl,
+                    RealEstateId = x.RealEstateId
+                }).ToListAsync();
 
             var vm = new KindergardenDeleteViewModel
             {
-                Id = kindergarden.Id,
-                GroupName = kindergarden.GroupName,
-                ChildrenCount = kindergarden.ChildrenCount,
-                KindergartenName = kindergarden.KindergartenName,
-                TeacherName = kindergarden.TeacherName,
-                CreatedAt = kindergarden.CreatedAt,
-                UpdatedAt = kindergarden.UpdatedAt
+                Id = dbRealEstate.Id,
+                GroupName = dbRealEstate.Address,
+                ChildrenCount = dbRealEstate.ChildrenCount,
+                KindergartenName = dbRealEstate.KindergartenName,
+                TeacherName = dbRealEstate.TeacherName,
+                CreatedAt = dbRealEstate.CreatedAt,
+                UpdatedAt = dbRealEstate.UpdatedAt,
+                FilesToApiViewModels = images
             };
-
-            vm.Images.AddRange(images);
 
             return View(vm);
         }
@@ -207,20 +201,24 @@ namespace ShopTAR25.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveImage(
-            Guid imageId,
-            Guid kindergardenId)
+        [HttpGet]
+        public async Task<IActionResult> RemoveImage(Guid imageId, Guid kindergardenId)
         {
-            await _fileService.RemoveImageFromApi(
-                new FileToApiDto
-                {
-                    Id = imageId
-                });
+            var image = await _context.FilesToApi.FirstOrDefaultAsync(x => x.Id == imageId);
 
-            return RedirectToAction(
-                nameof(Update),
-                new { id = kindergardenId });
+            if (image != null)
+            {
+                _context.FilesToApi.Remove(image);
+                await _context.SaveChangesAsync();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", image.FileUrl);
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+            }
+
+            return RedirectToAction(nameof(Update), new { id = kindergardenId });
         }
     }
 }
