@@ -24,7 +24,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             _webHost = webHost;
         }
         // See public FileServices on constructor
-       public void FilesToApi(SpaceshipDto dto, Spaceship domain)
+       public void FilesToApi(LibraryDto dto, Library domain)
        {
             //kindlasti peab ankeedil olema üks fail 
             if(dto.Files != null && dto.Files.Count > 0)
@@ -56,7 +56,7 @@ namespace ShopTARpe25.ApplicationServices.Services
                             //domain ja ??
                             Id = Guid.NewGuid(),
                             ExistingFilePath =  uniqueFileName,
-                            SpaceshipId = domain.Id
+                            LibraryId = domain.Id
                         };
 
                         _context.FileToApis.AddAsync(path);

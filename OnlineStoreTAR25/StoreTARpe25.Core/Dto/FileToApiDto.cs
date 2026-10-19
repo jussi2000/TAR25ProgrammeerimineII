@@ -7,6 +7,6 @@
         //see muutuja hakkab näitama, kus asub meie file
         //ning see on ühenduses kosmoselaevaga
         public string ExistingFilePath { get; set; }
-        public Guid? SpaceshipId { get; set; }
+        public Guid? LibraryId { get; set; }
     }
 }

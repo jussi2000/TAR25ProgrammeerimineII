@@ -1,17 +1,17 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipCreateUpdateViewModel
+﻿@model ShopTARpe25.Models.Library.LibraryCreateUpdateViewModel
 
 @if (Model.Id.HasValue)
 {
-    <h1>Spaceship Update</h1>
+    <h1>Library Update</h1>
 }
 else
 {
-    <h1>Spaceship Create</h1>
+    <h1>Library Create</h1>
 }
 
 <form  method="post" enctype="multipart/form-data">
     <div>
-        Spaceship Create
+        Library Create
     </div>
 
     <div>
@@ -62,7 +62,7 @@ else
             {
                 <partial name="_images" model="images" />
             <partial name="_Images" model="images" />
-            <input asp-action="removeImage" asp-controller="spaceship" asp-route-imageId="@images.ImageId"
+            <input asp-action="removeImage" asp-controller="library" asp-route-imageId="@images.ImageId"
             type="submit" class="btn btn-danger" value="Remove Image" />
             }
         </div>
@@ -71,13 +71,13 @@ else
 
         @if (Model.Id.HasValue)
         {
-        <input asp-action="update" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Update" />
+        <input asp-action="update" asp-controller="library" type="submit" class="btn btn-primary" value="Update" />
         }
         else
         {
-             <input asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
+        <input asp-action="create" asp-controller="library" type="submit" class="btn btn-primary" value="Create" />
         }
 
-    <a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to List</a>
 
 </form>

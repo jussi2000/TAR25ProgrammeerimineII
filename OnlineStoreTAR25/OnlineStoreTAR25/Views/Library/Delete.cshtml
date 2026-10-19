@@ -1,9 +1,9 @@
-﻿@model ShopTARpe25.Models.Spaceship.SpaceshipDeleteViewModel
+﻿@model ShopTARpe25.Models.Library.LibraryDeleteViewModel
 
 <h1>Delete</h1>
 
 <div>
-    <h4>Spaceship</h4>
+    <h4>Library</h4>
     <hr />
 
     <dl class="row">
@@ -72,7 +72,7 @@
     <form asp-action="DeleteConfirmation">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to list</a>
+        <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to list</a>
     </form>
 
 </div>

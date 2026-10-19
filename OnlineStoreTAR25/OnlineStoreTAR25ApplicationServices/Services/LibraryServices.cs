@@ -9,12 +9,12 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.ApplicationServices.Services
 {
 
-    public class SpaceshipServices : IspaceshipServices
+    public class LibraryServices : ILibraryServices
     {
         private readonly ShopTARpe25Context _context;
         private readonly IFileServices _fileServices;
 
-        public SpaceshipServices
+        public LibraryServices
             (
                 ShopTARpe25Context context,
                 IFileServices fileServices
@@ -23,10 +23,10 @@ namespace ShopTARpe25.ApplicationServices.Services
             _context = context;
             _fileServices = fileServices;
         }
-        public async Task<Spaceship> Create(SpaceshipDto dto)
+        public async Task<Library> Create(LibraryDto dto)
         {
 
-            Spaceship domain = new();
+            Library domain = new();
 
             domain.Id = Guid.NewGuid();
             domain.Name = dto.Name;
@@ -47,7 +47,7 @@ namespace ShopTARpe25.ApplicationServices.Services
             //defineeritud Core projectis
             //konstruktori kaudu tuleb injectida repository
 
-            await _context.Spaceships.AddAsync(domain);
+            await _context.Libraries.AddAsync(domain);
             await _context.SaveChangesAsync();
 
 
@@ -56,46 +56,46 @@ namespace ShopTARpe25.ApplicationServices.Services
 
         //siia teha uus meetod nimega DetailAsync
         //see ainult pärib andmed contextist
-        public async Task<Spaceship> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
+        public async Task<Library> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
         {
-            var result = await _context.Spaceships
+            var result = await _context.Libraries
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
 
         }
 
-        public async Task<Spaceship> Update(SpaceshipDto dto)
+        public async Task<Library> Update(LibraryDto dto)
         {
-            Spaceship spaceship = new();
+            Library library = new();
 
-            spaceship.Id = dto.Id;
-            spaceship.Name = dto.Name;
-            spaceship.Classification = dto.Classification;
-            spaceship.BuildDate = dto.BuildDate;
-            spaceship.Crew = dto.Crew;
-            spaceship.EnginePower = dto.EnginePower;
-            spaceship.CreatedAt = dto.CreatedAt;
-            spaceship.ModifiedAt = DateTime.Now;
-            _fileServices.FilesToApi(dto, spaceship);
+            library.Id = dto.Id;
+            library.Name = dto.Name;
+            library.Classification = dto.Classification;
+            library.BuildDate = dto.BuildDate;
+            library.Crew = dto.Crew;
+            library.EnginePower = dto.EnginePower;
+            library.CreatedAt = dto.CreatedAt;
+            library.ModifiedAt = DateTime.Now;
+            _fileServices.FilesToApi(dto, library);
 
-            _context.Spaceships.Update(spaceship);
+            _context.Libraries.Update(library);
             await _context.SaveChangesAsync();
 
-            return spaceship;
+            return library;
         }
         //DELETE ---------------------------------------------------
-        public async Task<Spaceship> Delete(Guid id)
+        public async Task<Library> Delete(Guid id)
         {
-            var result = await _context.Spaceships
+            var result = await _context.Libraries
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             var images = await _context.FileToApis
-                 .Where(x => x.SpaceshipId == id)
+                 .Where(x => x.LibraryId == id)
              .Select(y => new FileToApiDto
              {
                  Id = y.Id,
-                 SpaceshipId = y.SpaceshipId,
+                 LibraryId = y.LibraryId,
                  ExistingFilePath = y.ExistingFilePath,
 
              }).ToArrayAsync();
@@ -103,9 +103,9 @@ namespace ShopTARpe25.ApplicationServices.Services
             //peame kustutama eilse, mis kustutab failid serverist
             await _fileServices.RemoveImagesFromApi(images);
 
-            _context.Spaceships.Remove(result);
+            _context.Libraries.Remove(result);
 
-            _context.Spaceships.Remove(result);
+            _context.Libraries.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;
