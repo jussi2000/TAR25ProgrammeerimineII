@@ -1,114 +1,114 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Identity.Client;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
-using ShopTARpe25.Core.Serviceinterface;
-using ShopTARpe25.Data;
+using StoreTAR25.Data;
+using StoreTARpe25.Core.Domain;
+using StoreTARpe25.Core.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ShopTARpe25.ApplicationServices.Services
+namespace OnlineStoreTAR25ApplicationServices.Services
 {
-
-    public class LibraryServices : ILibraryServices
+    public class LibraryServices
     {
         private readonly ShopTARpe25Context _context;
-        private readonly IFileServices _fileServices;
 
-        public LibraryServices
-            (
-                ShopTARpe25Context context,
-                IFileServices fileServices
-            )
+        public LibraryServices(ShopTARpe25Context context)
         {
             _context = context;
-            _fileServices = fileServices;
         }
-        public async Task<Library> Create(LibraryDto dto)
+
+        public async Task<Book> AddBookAsync(LibraryDto dto)
         {
+            var book = new Book
+            {
+                Id = Guid.NewGuid(),
+                Title = dto.Title,
+                Author = dto.Author,
+                ReleaseYear = dto.ReleaseYear,
+                IsAvailable = true
+            };
 
-            Library domain = new();
-
-            domain.Id = Guid.NewGuid();
-            domain.Name = dto.Name;
-            domain.Classification = dto.Classification;
-            domain.BuildDate = dto.BuildDate;
-            domain.Crew = dto.Crew;
-            domain.EnginePower = dto.EnginePower;
-            domain.CreatedAt = DateTime.Now;
-            domain.ModifiedAt = DateTime.Now;
-            //peame saama File teenuse välja kutsuda,
-            //mis salvestab failid serverisse
-            _fileServices.FilesToApi(dto, domain);
-
-
-            //siia tuleb kood, mis salvestab domain
-            //objecti andmebaasi
-            //tuleb kasutada repository'd, mis on
-            //defineeritud Core projectis
-            //konstruktori kaudu tuleb injectida repository
-
-            await _context.Libraries.AddAsync(domain);
+            await _context.Books.AddAsync(book);
             await _context.SaveChangesAsync();
-
-
-            return domain;
+            return book;
         }
 
-        //siia teha uus meetod nimega DetailAsync
-        //see ainult pärib andmed contextist
-        public async Task<Library> DetailsAsync(Guid id) //otsitakse läbi id ehk tuleb Guid id panna
+        public async Task<IEnumerable<Book>> GetBooksByYearAsync(int year)
         {
-            var result = await _context.Libraries
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-
+            return await _context.Books
+                .Where(b => b.ReleaseYear == year)
+                .ToListAsync();
         }
 
-        public async Task<Library> Update(LibraryDto dto)
+        public async Task<Book> GetBookByTitleAsync(string title)
         {
-            Library library = new();
+            if (string.IsNullOrWhiteSpace(title)) return null;
 
-            library.Id = dto.Id;
-            library.Name = dto.Name;
-            library.Classification = dto.Classification;
-            library.BuildDate = dto.BuildDate;
-            library.Crew = dto.Crew;
-            library.EnginePower = dto.EnginePower;
-            library.CreatedAt = dto.CreatedAt;
-            library.ModifiedAt = DateTime.Now;
-            _fileServices.FilesToApi(dto, library);
+            return await _context.Books
+                .FirstOrDefaultAsync(b => b.Title.ToLower().Contains(title.ToLower()));
+        }
 
-            _context.Libraries.Update(library);
+        public async Task<IEnumerable<Book>> GetCurrentlyBorrowedBooksAsync()
+        {
+            return await _context.Books
+                .Where(b => b.IsAvailable == false)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Loan>> GetLoansByReaderAsync(Guid readerId)
+        {
+            return await _context.Loans
+                .Include(l => l.Book)
+                .Where(l => l.ReaderId == readerId)
+                .ToListAsync();
+        }
+
+        public async Task<Book> UpdateBookTitleAsync(Guid bookId, string newTitle)
+        {
+            var book = await _context.Books.FindAsync(bookId);
+            if (book == null) throw new Exception("Raamatut ei leitud!");
+
+            book.Title = newTitle;
+
+            _context.Books.Update(book);
             await _context.SaveChangesAsync();
-
-            return library;
+            return book;
         }
-        //DELETE ---------------------------------------------------
-        public async Task<Library> Delete(Guid id)
+
+        public async Task<bool> ReturnBookAsync(Guid loanId)
         {
-            var result = await _context.Libraries
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var loan = await _context.Loans
+                .Include(l => l.Book)
+                .FirstOrDefaultAsync(l => l.Id == loanId);
 
-            var images = await _context.FileToApis
-                 .Where(x => x.LibraryId == id)
-             .Select(y => new FileToApiDto
-             {
-                 Id = y.Id,
-                 LibraryId = y.LibraryId,
-                 ExistingFilePath = y.ExistingFilePath,
+            if (loan == null || loan.ReturnDate != null) return false;
 
-             }).ToArrayAsync();
+            loan.ReturnDate = DateTime.Now;
+            loan.Book.IsAvailable = true;
 
-            //peame kustutama eilse, mis kustutab failid serverist
-            await _fileServices.RemoveImagesFromApi(images);
-
-            _context.Libraries.Remove(result);
-
-            _context.Libraries.Remove(result);
+            _context.Loans.Update(loan);
             await _context.SaveChangesAsync();
+            return true;
+        }
 
-            return result;
+        public async Task<bool> DeleteBookAsync(Guid bookId)
+        {
+            var book = await _context.Books.FindAsync(bookId);
+            if (book == null) return false;
+
+            var hasLoans = await _context.Loans.AnyAsync(l => l.BookId == bookId);
+
+            if (hasLoans)
+            {
+                throw new InvalidOperationException("Raamatut ei saa kustutada, kuna see on seotud laenutustega.");
+            }
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
