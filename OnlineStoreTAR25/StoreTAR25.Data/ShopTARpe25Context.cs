@@ -1,18 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
-using StoreTARpe25.Core.Domain;
 
-namespace StoreTAR25.Data
+namespace ShopTARpe25.Data;
+
+public class LibraryContext : DbContext
 {
-    public class ShopTARpe25Context : DbContext
+    public LibraryContext(DbContextOptions<LibraryContext> options)
+        : base(options)
     {
-        public ShopTARpe25Context(DbContextOptions<ShopTARpe25Context> options)
-            : base(options)
-        {
-        }
-
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Reader> Readers { get; set; }
-        public DbSet<Loan> Loans { get; set; }
     }
+
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Reader> Readers { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+
+    // Andmebaasi ühendus seadistatakse Program.cs failis.
+    // Ühenduse andmed asuvad appsettings.json failis.
+    // UseSqlServer määrab, et kasutame SQL Serveri andmebaasi.
 }

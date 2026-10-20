@@ -5,13 +5,13 @@ namespace ShopTARpe25.Core.Serviceinterface
 {
     public interface ILibraryServices
     {
-        Task<Library> Create(LibraryDto dto);
+        Task<Book> Create(Book dto);
 
-        Task<Library> DetailsAsync(Guid id);
+        Task<Book> DetailsAsync(int id);
 
-        Task<Library> Update(LibraryDto id);
+        Task<Book> Update(Book dto);
 
-        Task<Library> Delete(Guid id);
+        Task<Book> Delete(int id);
 
     }
 }

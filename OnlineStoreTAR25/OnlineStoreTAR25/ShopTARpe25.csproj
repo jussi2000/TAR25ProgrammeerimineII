@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineStoreTAR25ApplicationServices\ShopTARpe25.ApplicationServices.csproj" />
+    <ProjectReference Include="..\StoreTAR25.Data\ShopTARpe25.Data.csproj" />
     <ProjectReference Include="..\StoreTARpe25.Core\ShopTARpe25.Core.csproj" />
   </ItemGroup>
 

@@ -1,17 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
-using StoreTAR25.Data;
-using StoreTARpe25.Core.Domain;
-using StoreTARpe25.Core.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ShopTARpe25.Core.Serviceinterface;
 
 namespace OnlineStoreTAR25ApplicationServices.Services
 {
-    public class LibraryServices
+    public class LibraryServices : ILibraryServices
     {
         private readonly ShopTARpe25Context _context;
 
@@ -24,10 +18,9 @@ namespace OnlineStoreTAR25ApplicationServices.Services
         {
             var book = new Book
             {
-                Id = Guid.NewGuid(),
                 Title = dto.Title,
                 Author = dto.Author,
-                ReleaseYear = dto.ReleaseYear,
+                PublishedYear = dto.PublishedYear,
                 IsAvailable = true
             };
 
@@ -39,7 +32,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
         public async Task<IEnumerable<Book>> GetBooksByYearAsync(int year)
         {
             return await _context.Books
-                .Where(b => b.ReleaseYear == year)
+                .Where(b => b.PublishedYear == year)
                 .ToListAsync();
         }
 
@@ -58,7 +51,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Loan>> GetLoansByReaderAsync(Guid readerId)
+        public async Task<IEnumerable<Loan>> GetLoansByReaderAsync(int readerId)
         {
             return await _context.Loans
                 .Include(l => l.Book)
@@ -66,7 +59,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
                 .ToListAsync();
         }
 
-        public async Task<Book> UpdateBookTitleAsync(Guid bookId, string newTitle)
+        public async Task<Book> UpdateBookTitleAsync(int bookId, string newTitle)
         {
             var book = await _context.Books.FindAsync(bookId);
             if (book == null) throw new Exception("Raamatut ei leitud!");
@@ -78,7 +71,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             return book;
         }
 
-        public async Task<bool> ReturnBookAsync(Guid loanId)
+        public async Task<bool> ReturnBookAsync(int loanId)
         {
             var loan = await _context.Loans
                 .Include(l => l.Book)
@@ -94,7 +87,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             return true;
         }
 
-        public async Task<bool> DeleteBookAsync(Guid bookId)
+        public async Task<bool> DeleteBookAsync(int bookId)
         {
             var book = await _context.Books.FindAsync(bookId);
             if (book == null) return false;

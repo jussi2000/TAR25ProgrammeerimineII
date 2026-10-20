@@ -1,5 +1,5 @@
-using AspNetCoreGeneratedDocument;
 using Microsoft.EntityFrameworkCore;
+using OnlineStoreTAR25ApplicationServices.Services;
 using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
@@ -10,13 +10,12 @@ namespace OnlineStoreTAR25
     {
         public static void Main(string[] args)
         {
-
             //Update-Database:
             //EntityFrameworkCore\Update-Database
 
+            //Ctrl+R ja Ctrl+G = võtab ära kõik hallid ehk kasutamatud usingud ära
+
             var builder = WebApplication.CreateBuilder(args);
-
-
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -26,10 +25,11 @@ namespace OnlineStoreTAR25
             builder.Services.AddScoped<IFileServices, FileServices>();
 
             //ühendame andmebaasiga vvv
-            //selleks, et tuleb installida Microsoft.EntityFrameworkCore,SqlServer
-            //kuiinstallitud, siis tuleb viidata namespacesis Mircrosoft.EntityFrameworkCore
-            builder.Services.AddDbContext<ShopTARpe25Context>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //selleks, et tuleb installida Microsoft.EntityFrameworkCore.SqlServer
+            //kui installitud, siis tuleb viidata namespacesis Microsoft.EntityFrameworkCore
+            builder.Services.AddDbContext<LibraryContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
@@ -37,7 +37,7 @@ namespace OnlineStoreTAR25
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
