@@ -3,18 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using OnlineStoreTAR25ApplicationServices.Services;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Data;
 
 namespace ShopTAR25.Controllers
 {
     public class LibraryController : Controller
     {
         private readonly LibraryServices _libraryService;
-        private readonly ShopTARpe25Context _context;
+        private readonly LibraryContext _context;
         private readonly IFileServices _fileService;
 
         public LibraryController(
             LibraryServices libraryService,
-            ShopTARpe25Context context,
+            LibraryContext context,
             IFileServices fileService)
         {
             _libraryService = libraryService;
@@ -98,7 +99,7 @@ namespace ShopTAR25.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {

@@ -8,6 +8,8 @@ namespace OnlineStoreTAR25
 {
     public class Program
     {
+
+        //tuleb lisada lugeja ka
         public static void Main(string[] args)
         {
             //Update-Database:

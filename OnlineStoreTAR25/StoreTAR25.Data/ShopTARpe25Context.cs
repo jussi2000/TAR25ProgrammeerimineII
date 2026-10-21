@@ -14,6 +14,7 @@ public class LibraryContext : DbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Reader> Readers { get; set; }
     public DbSet<Loan> Loans { get; set; }
+    public DbSet<FileToApi> FileToApis { get; set; }
 
     // Andmebaasi ühendus seadistatakse Program.cs failis.
     // Ühenduse andmed asuvad appsettings.json failis.

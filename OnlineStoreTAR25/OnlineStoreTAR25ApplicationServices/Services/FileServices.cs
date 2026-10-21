@@ -11,12 +11,12 @@ namespace ShopTARpe25.ApplicationServices.Services
     public class FileServices : IFileServices
     {
         //teha cunstructor, mis ühendab DB-d
-        private readonly ShopTARpe25Context _context;
+        private readonly LibraryContext _context;
         private readonly IHostEnvironment _webHost;
 
         public FileServices
             (
-                ShopTARpe25Context context,
+                LibraryContext context,
                 IHostEnvironment webHost
             )
         {
@@ -24,8 +24,8 @@ namespace ShopTARpe25.ApplicationServices.Services
             _webHost = webHost;
         }
         // See public FileServices on constructor
-       public void FilesToApi(LibraryDto dto, Library domain)
-       {
+        public void FilesToApi(LibraryDto dto, Book domain)
+        {
             //kindlasti peab ankeedil olema üks fail 
             if(dto.Files != null && dto.Files.Count > 0)
             {
@@ -56,10 +56,10 @@ namespace ShopTARpe25.ApplicationServices.Services
                             //domain ja ??
                             Id = Guid.NewGuid(),
                             ExistingFilePath =  uniqueFileName,
-                            LibraryId = domain.Id
+                            BookId = domain.Id
                         };
 
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
 
                     }
                 }
