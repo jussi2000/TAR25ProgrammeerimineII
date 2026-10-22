@@ -24,6 +24,7 @@ namespace OnlineStoreTAR25
 
             //see on dependency injection, mis võimaldab meil kasutada teenuseid controllerites
             builder.Services.AddScoped<ILibraryServices, LibraryServices>();
+            builder.Services.AddScoped<LibraryServices>();
             builder.Services.AddScoped<IFileServices, FileServices>();
 
             //ühendame andmebaasiga vvv

@@ -2,13 +2,10 @@
 {
     public class LibraryIndexViewModel
     {
-        public Guid? Id { get; set; }
-        public string Name { get; set; }
-        public string Classification { get; set; } = string.Empty;
-        public DateTime? BuildDate { get; set; }
-        public int? Crew { get; set; }
-        public int? EnginePower { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int PublishedYear { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }

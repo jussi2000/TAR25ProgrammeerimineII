@@ -1,55 +1,49 @@
 ﻿@model ShopTARpe25.Models.Library.LibraryCreateUpdateViewModel
 
-@if (Model.Id.HasValue)
+@if (Model.Id != Guid.Empty)
 {
-    <h1>Library Update</h1>
+    <h1>Book Update</h1>
 }
 else
 {
-    <h1>Library Create</h1>
+    <h1>Book Create</h1>
 }
 
-<form  method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div>
-        Library Create
+        Book Details
     </div>
 
-    <div>
-        <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group row">
+        <label asp-for="Title" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="Title" class="form-control" />
         </div>
     </div>
 
-    <div>
-        <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
+    <div class="form-group row">
+        <label asp-for="Author" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Classification" class="form-control" />
+            <input asp-for="Author" class="form-control" />
         </div>
     </div>
 
-    <div>
-        <label asp-for="BuildDate" class="col-sm-2 col-form-label"></label>
+    <div class="form-group row">
+        <label asp-for="PublishedYear" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="BuildDate" class="form-control" />
+            <input asp-for="PublishedYear" class="form-control" />
         </div>
     </div>
 
-    <div>
-        <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
+    <div class="form-group row">
+        <label asp-for="IsAvailable" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Crew" class="form-control" />
+            <input asp-for="IsAvailable" class="form-check-input" type="checkbox" />
         </div>
     </div>
 
-    <div>
-        <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="EnginePower" class="form-control" />
-        </div>
-    </div>
-
-    See koht on failide üleslaadimise vorm.
     <div class="form-group row">
         <label asp-for="Files" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-5">
@@ -59,25 +53,23 @@ else
 
     <div>
         @foreach (var images in Model.Image)
-            {
-                <partial name="_images" model="images" />
+        {
             <partial name="_Images" model="images" />
             <input asp-action="removeImage" asp-controller="library" asp-route-imageId="@images.ImageId"
-            type="submit" class="btn btn-danger" value="Remove Image" />
-            }
-        </div>
+                   type="submit" class="btn btn-danger" value="Remove Image" />
+        }
+    </div>
 
-        <hr />
+    <hr />
 
-        @if (Model.Id.HasValue)
-        {
+    @if (Model.Id != Guid.Empty)
+    {
         <input asp-action="update" asp-controller="library" type="submit" class="btn btn-primary" value="Update" />
-        }
-        else
-        {
+    }
+    else
+    {
         <input asp-action="create" asp-controller="library" type="submit" class="btn btn-primary" value="Create" />
-        }
+    }
 
     <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to List</a>
-
 </form>

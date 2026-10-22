@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OnlineStoreTAR25ApplicationServices.Services;
+using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
+using ShopTARpe25.Models.Library;
 
 namespace ShopTAR25.Controllers
 {
     public class LibraryController : Controller
     {
-        private readonly LibraryServices _libraryService;
+        private readonly ILibraryServices _libraryService;
         private readonly LibraryContext _context;
         private readonly IFileServices _fileService;
 
         public LibraryController(
-            LibraryServices libraryService,
+            ILibraryServices libraryService,
             LibraryContext context,
             IFileServices fileService)
         {
@@ -23,91 +24,196 @@ namespace ShopTAR25.Controllers
             _fileService = fileService;
         }
 
-        // 1. Kuvab kõik raamatud või peamise vaate
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var books = await _context.Books.ToListAsync();
-            return View(books);
+            var result = _context.Books
+                .Select(x => new LibraryIndexViewModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Author = x.Author,
+                    PublishedYear = x.PublishedYear,
+                    IsAvailable = x.IsAvailable
+                });
+
+            return View(result);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            LibraryCreateUpdateViewModel vm = new();
+            return View("CreateUpdate", vm);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Create(LibraryDto dto)
+        public async Task<IActionResult> Create(LibraryCreateUpdateViewModel vm)
         {
-            dto.IsAvailable = true; 
+            var dto = new LibraryDto
+            {
+                Id = vm.Id,
+                Title = vm.Title,
+                Author = vm.Author,
+                PublishedYear = vm.PublishedYear,
+                IsAvailable = vm.IsAvailable,
+                Files = vm.Files,
+                FileToApiDtos = vm.Image?
+                    .Select(file => new FileToApiDto
+                    {
+                        Id = file.ImageId,
+                        ExistingFilePath = file.FilePath,
+                    }).ToArray()
+            };
+
             await _libraryService.AddBookAsync(dto);
 
             return RedirectToAction(nameof(Index));
         }
 
-
-        public async Task<IActionResult> GetByYear(int year)
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            var books = await _libraryService.GetBooksByYearAsync(year);
-            return View("Index", books);
-        }
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
 
-
-        public async Task<IActionResult> GetByTitle(string title)
-        {
-            var book = await _libraryService.GetBookByTitleAsync(title);
-            return View("Details", book);
-        }
-
-
-        public async Task<IActionResult> BorrowedBooks()
-        {
-            var books = await _libraryService.GetCurrentlyBorrowedBooksAsync();
-            return View("Index", books);
-        }
-
-
-        public async Task<IActionResult> ReaderLoans(int readerId)
-        {
-            var loans = await _libraryService.GetLoansByReaderAsync(readerId);
-            return View(loans);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateTitle(Guid id, string newTitle)
-        {
-            try
-            {
-                await _libraryService.UpdateBookTitleAsync(id, newTitle);
-            }
-            catch (Exception)
+            if (book == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            var images = await _context.FileToApis
+                .Where(x => x.BookId == id) // Kui siin on punane joon, vaata kas FileToApis on BookId või LibraryId
+                .Select(y => new imageViewModel
+                {
+                    FilePath = y.ExistingFilePath,
+                    ImageId = y.Id,
+                    BookId = y.BookId
+                }).ToArrayAsync();
+
+            var vm = new LibraryDetailsViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                PublishedYear = book.PublishedYear,
+                IsAvailable = book.IsAvailable
+            };
+
+            vm.Images.AddRange(images);
+
+            return View(vm);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ReturnBook(int loanId)
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
         {
-            await _libraryService.ReturnBookAsync(loanId);
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            var images = await _context.FileToApis
+                .Where(x => x.BookId == id)
+                .Select(y => new imageViewModel
+                {
+                    FilePath = y.ExistingFilePath,
+                    ImageId = y.Id,
+                    BookId = y.BookId
+                }).ToArrayAsync();
+
+            var vm = new LibraryCreateUpdateViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                PublishedYear = book.PublishedYear,
+                IsAvailable = book.IsAvailable
+            };
+
+            vm.Image.AddRange(images);
+
+            return View("CreateUpdate", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(LibraryCreateUpdateViewModel vm)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == vm.Id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            book.Title = vm.Title;
+            book.Author = vm.Author;
+            book.PublishedYear = vm.PublishedYear;
+            book.IsAvailable = vm.IsAvailable;
+
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
-
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            try
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (book == null)
             {
-                await _libraryService.DeleteBookAsync(id);
+                return NotFound();
             }
-            catch (InvalidOperationException ex)
+
+            var images = await _context.FileToApis
+                .Where(x => x.BookId == id)
+                .Select(y => new imageViewModel
+                {
+                    FilePath = y.ExistingFilePath,
+                    ImageId = y.Id,
+                    BookId = y.BookId
+                }).ToArrayAsync();
+
+            var vm = new LibraryDeleteViewModel
             {
-                ModelState.AddModelError("", ex.Message);
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                PublishedYear = book.PublishedYear,
+                IsAvailable = book.IsAvailable
+            };
+
+            vm.Images.AddRange(images);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmation(Guid id)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
+            if (book != null)
+            {
+                _context.Books.Remove(book);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(imageViewModel vm)
+        {
+            var dto = new FileToApiDto()
+            {
+                Id = vm.ImageId
+            };
+            var image = await _fileService.RemoveImageFromApi(dto);
+
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));

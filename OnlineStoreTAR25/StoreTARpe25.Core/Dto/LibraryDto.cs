@@ -6,7 +6,7 @@ namespace ShopTARpe25.Core.Dto
     public class LibraryDto 
     {
         //Dto class on selleks et vahetada andemid
-public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public int PublishedYear { get; set; }

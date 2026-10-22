@@ -2,45 +2,44 @@
 
 @* Nupu tegemine *@
 <div>
-    <a asp-action="create" asp-controller="Library" class="btn btn-primary">Create
-    </a>
+    <a asp-action="create" asp-controller="Library" class="btn btn-primary">Create</a>
 </div>
 
-<!--Main branch-->
-
 @* Loendi kuvamine *@
-<h2>Libraries</h2>
-
-<table class="table"> @* iga tulba pealkirjad *@
+<h2>Library Books</h2>
+<table class="table">
+    @* iga tulba pealkirjad *@
     <thead>
         <tr>
             <th>Nr</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Built Date</th>
-            <th>Crew</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Published Year</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @{
             int rownumber = 1; @* id Nr'id, loendus algab ühest *@
         }
-        @foreach (var ship in Model)
+        @foreach (var book in Model)
         {
             <tr>
                 <td>@rownumber</td> @* järjekorranumber *@
-                <td>@ship.Name</td>
-                <td>@ship.Classification</td>
-                <td>@ship.BuildDate</td>
-                <td>@ship.Crew</td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.PublishedYear</td>
+                <td>@(book.IsAvailable ? "Available" : "Borrowed")</td>
                 <td>
-                    @* Nupud: details, edit, delete vvv *@
-                    <a asp-action="details"asp-route-id="@ship.Id" class="btn btn-warning">Details</a>
-                    <a asp-action="update"asp-route-id="@ship.Id" class="btn btn-primary">Update</a>
-                    <a asp-action="delete"asp-route-id="@ship.Id" class="btn btn-danger">Delete</a>
+                    @* Nupud: details, update, delete *@
+                    <a asp-action="details" asp-route-id="@book.Id" class="btn btn-warning">Details</a>
+                    <a asp-action="update" asp-route-id="@book.Id" class="btn btn-primary">Update</a>
+                    <a asp-action="delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
-            rownumber++; @* iga uus rida on +1 id number, ehk üks arv suurem *@
+            rownumber++;
+            @* iga uus rida on +1 id number *@
         }
     </tbody>
 </table>
