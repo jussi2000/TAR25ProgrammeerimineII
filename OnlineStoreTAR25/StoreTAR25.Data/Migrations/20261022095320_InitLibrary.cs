@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShopTARpe25.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitLibrary : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,8 +59,7 @@ namespace ShopTARpe25.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    BookId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReaderId = table.Column<int>(type: "int", nullable: false),
                     LoanDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -69,8 +68,8 @@ namespace ShopTARpe25.Data.Migrations
                 {
                     table.PrimaryKey("PK_Loans", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Loans_Books_BookId1",
-                        column: x => x.BookId1,
+                        name: "FK_Loans_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -83,9 +82,9 @@ namespace ShopTARpe25.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Loans_BookId1",
+                name: "IX_Loans_BookId",
                 table: "Loans",
-                column: "BookId1");
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loans_ReaderId",

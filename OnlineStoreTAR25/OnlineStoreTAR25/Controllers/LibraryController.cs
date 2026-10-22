@@ -76,7 +76,7 @@ namespace ShopTAR25.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTitle(int id, string newTitle)
+        public async Task<IActionResult> UpdateTitle(Guid id, string newTitle)
         {
             try
             {

@@ -12,8 +12,8 @@ using ShopTARpe25.Data;
 namespace ShopTARpe25.Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20261021125003_Init")]
-    partial class Init
+    [Migration("20261022095320_InitLibrary")]
+    partial class InitLibrary
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,10 +76,7 @@ namespace ShopTARpe25.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("BookId1")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LoanDate")
@@ -93,7 +90,7 @@ namespace ShopTARpe25.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId1");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("ReaderId");
 
@@ -125,7 +122,7 @@ namespace ShopTARpe25.Data.Migrations
                 {
                     b.HasOne("ShopTARpe25.Core.Domain.Book", "Book")
                         .WithMany("Loans")
-                        .HasForeignKey("BookId1")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
