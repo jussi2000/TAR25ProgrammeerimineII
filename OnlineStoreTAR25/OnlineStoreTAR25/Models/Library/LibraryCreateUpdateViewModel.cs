@@ -14,6 +14,6 @@ namespace ShopTARpe25.Models.Library
         public DateTime ModifiedAt { get; set; }
 
         public List<IFormFile> Files { get; set; }
-        public List<imageViewModel> Image { get; set; } = new List<imageViewModel>();
+        public List<imageViewModel> Images { get; set; } = new List<imageViewModel>();
     }
 }

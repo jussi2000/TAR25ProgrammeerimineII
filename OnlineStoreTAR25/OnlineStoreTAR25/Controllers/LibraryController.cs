@@ -57,7 +57,7 @@ namespace ShopTAR25.Controllers
                 PublishedYear = vm.PublishedYear,
                 IsAvailable = vm.IsAvailable,
                 Files = vm.Files,
-                FileToApiDtos = vm.Image?
+                FileToApiDtos = vm.Images?
                     .Select(file => new FileToApiDto
                     {
                         Id = file.ImageId,
@@ -81,7 +81,7 @@ namespace ShopTAR25.Controllers
             }
 
             var images = await _context.FileToApis
-                .Where(x => x.BookId == id) // Kui siin on punane joon, vaata kas FileToApis on BookId või LibraryId
+                .Where(x => x.BookId == id)
                 .Select(y => new imageViewModel
                 {
                     FilePath = y.ExistingFilePath,
@@ -95,7 +95,9 @@ namespace ShopTAR25.Controllers
                 Title = book.Title,
                 Author = book.Author,
                 PublishedYear = book.PublishedYear,
-                IsAvailable = book.IsAvailable
+                IsAvailable = book.IsAvailable,
+                CreatedAt = book.CreatedAt,
+                ModifiedAt = book.ModifiedAt
             };
 
             vm.Images.AddRange(images);
@@ -131,7 +133,7 @@ namespace ShopTAR25.Controllers
                 IsAvailable = book.IsAvailable
             };
 
-            vm.Image.AddRange(images);
+            vm.Images.AddRange(images);
 
             return View("CreateUpdate", vm);
         }
@@ -149,6 +151,7 @@ namespace ShopTAR25.Controllers
             book.Author = vm.Author;
             book.PublishedYear = vm.PublishedYear;
             book.IsAvailable = vm.IsAvailable;
+            book.ModifiedAt = DateTime.Now;
 
             _context.Books.Update(book);
             await _context.SaveChangesAsync();
@@ -210,11 +213,6 @@ namespace ShopTAR25.Controllers
                 Id = vm.ImageId
             };
             var image = await _fileService.RemoveImageFromApi(dto);
-
-            if (image == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
 
             return RedirectToAction(nameof(Index));
         }
