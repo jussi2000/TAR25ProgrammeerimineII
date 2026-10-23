@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ShopTARpe25.Core.Domain.Loan>
+
+@* ühe konkreetse lugeja laenutused *@
+<h2>Loans of @ViewBag.ReaderName</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nr</th>
+            <th>Book</th>
+            <th>Loan Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int rownumber = 1;
+        }
+        @foreach (var loan in Model)
+        {
+            <tr>
+                <td>@rownumber</td>
+                <td>@loan.Book.Title</td>
+                <td>@loan.LoanDate.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@(loan.ReturnDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                <td>@(loan.ReturnDate == null ? "Borrowed" : "Returned")</td>
+                <td>
+                    @* raamatu tagastamine *@
+                    @if (loan.ReturnDate == null)
+                    {
+                        <form asp-action="ReturnBook" asp-controller="Library" method="post">
+                            <input type="hidden" name="loanId" value="@loan.Id" />
+                            <input type="hidden" name="readerId" value="@ViewBag.ReaderId" />
+                            <input type="submit" value="Return" class="btn btn-success btn-sm" />
+                        </form>
+                    }
+                </td>
+            </tr>
+            rownumber++;
+        }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="6">This reader has no loans.</td></tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Readers" asp-controller="Library" class="btn btn-secondary">Back to Readers</a>

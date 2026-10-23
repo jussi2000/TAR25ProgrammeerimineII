@@ -1,12 +1,30 @@
 ﻿@model IEnumerable<ShopTARpe25.Models.Library.LibraryIndexViewModel>
-
+@{
+    var readers = ViewBag.Readers as IEnumerable<ShopTARpe25.Core.Domain.Reader>;
+}
 @* Nupu tegemine *@
 <div>
     <a asp-action="create" asp-controller="Library" class="btn btn-primary">Create</a>
+    <a asp-action="Index" asp-controller="Library" asp-route-borrowed="true" class="btn btn-outline-secondary">Borrowed books</a>
 </div>
 
-@* Loendi kuvamine *@
-<h2>Library Books</h2>
+@* otsing *@
+<form method="get" asp-action="Index" asp-controller="Library" class="row g-2 my-3">
+    <div class="col-sm-4">
+        <input name="title" value="@ViewBag.SearchTitle" class="form-control" placeholder="Search by title" />
+    </div>
+    <div class="col-sm-2">
+        <input name="year" value="@ViewBag.Year" type="number" class="form-control" placeholder="Year (e.g. 2000)" />
+    </div>
+    <div class="col-sm-3">
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <a asp-action="Index" asp-controller="Library" class="btn btn-link">Clear</a>
+    </div>
+</form>
+
+
+<h2>@(ViewBag.Borrowed == true ? "Borrowed Books" : "Library Books")</h2>
+
 <table class="table">
     @* iga tulba pealkirjad *@
     <thead>
@@ -17,6 +35,7 @@
             <th>Published Year</th>
             <th>Status</th>
             <th>Actions</th>
+            <th>Loan</th>
         </tr>
     </thead>
     <tbody>
@@ -37,9 +56,29 @@
                     <a asp-action="update" asp-route-id="@book.Id" class="btn btn-primary">Update</a>
                     <a asp-action="delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
                 </td>
+                <td>
+                    @* raamatu laenutamine*@
+                    @if (book.IsAvailable && readers != null && readers.Any())
+                    {
+                        <form asp-action="LoanBook" asp-controller="Library" method="post" class="d-flex gap-1">
+                            <input type="hidden" name="bookId" value="@book.Id" />
+                            <select name="readerId" class="form-select form-select-sm">
+                                @foreach (var reader in readers)
+                                {
+                                    <option value="@reader.Id">@reader.FullName</option>
+                                }
+                            </select>
+                            <input type="submit" value="Loan" class="btn btn-success btn-sm" />
+                        </form>
+                    }
+                </td>
             </tr>
             rownumber++;
             @* iga uus rida on +1 id number *@
         }
     </tbody>
+    @if (!Model.Any())
+    {
+        <tr><td colspan="7">No books found.</td></tr>
+    }
 </table>

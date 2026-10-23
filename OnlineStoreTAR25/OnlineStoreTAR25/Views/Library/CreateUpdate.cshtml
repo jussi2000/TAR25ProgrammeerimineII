@@ -42,6 +42,15 @@ else
         <div class="col-sm-10">
             <input asp-for="IsAvailable" class="form-check-input" type="checkbox" />
         </div>
+        @if (Model.Id != Guid.Empty)
+        {
+            <div class="form-group row">
+                <label asp-for="IsAvailable" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="IsAvailable" class="form-check-input" type="checkbox" />
+                </div>
+            </div>
+        }
     </div>
 
     @if (Model.Id != Guid.Empty)

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ShopTARpe25.Core.Domain.Reader>
+
+@* lugeja lisamine *@
+<h2>Add Reader</h2>
+<form asp-action="AddReader" asp-controller="Library" method="post" class="row g-2 mb-4">
+    <div class="col-sm-4">
+        <input name="fullName" class="form-control" placeholder="Full name" required />
+    </div>
+    <div class="col-sm-4">
+        <input name="email" type="email" class="form-control" placeholder="Email" required />
+    </div>
+    <div class="col-sm-2">
+        <input type="submit" value="Add" class="btn btn-primary" />
+    </div>
+</form>
+
+<h2>Readers</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nr</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Active loans</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int rownumber = 1;
+        }
+        @foreach (var reader in Model)
+        {
+            <tr>
+                <td>@rownumber</td>
+                <td>@reader.FullName</td>
+                <td>@reader.Email</td>
+                <td>@reader.Loans.Count(l => l.ReturnDate == null)</td>
+                <td>
+                    <a asp-action="ReaderLoans" asp-route-id="@reader.Id" class="btn btn-warning">Loans</a>
+                </td>
+            </tr>
+            rownumber++;
+        }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="5">No readers yet.</td></tr>
+        }
+    </tbody>
+</table>

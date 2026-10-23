@@ -68,7 +68,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
         {
             return await _context.Loans
                 .Include(l => l.Book)
-                .Include(l => l.Reader)          // <-- uus rida
+                .Include(l => l.Reader)
                 .Where(l => l.ReaderId == readerId)
                 .ToListAsync();
         }
@@ -81,6 +81,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
                 throw new Exception("Raamatut ei leitud!");
 
             book.Title = newTitle;
+            book.ModifiedAt = DateTime.Now;
 
             _context.Books.Update(book);
             await _context.SaveChangesAsync();
@@ -106,7 +107,6 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             return true;
         }
 
-
         public async Task<bool> DeleteBookAsync(Guid bookId)
         {
             var book = await _context.Books.FindAsync(bookId);
@@ -129,5 +129,59 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             return true;
         }
 
+        public async Task<Reader> AddReaderAsync(string fullName, string email)
+        {
+            var reader = new Reader
+            {
+                FullName = fullName,
+                Email = email
+            };
+
+            await _context.Readers.AddAsync(reader);
+            await _context.SaveChangesAsync();
+
+            return reader;
+        }
+
+        public async Task<IEnumerable<Reader>> GetReadersAsync()
+        {
+            return await _context.Readers
+                .Include(r => r.Loans)
+                .OrderBy(r => r.FullName)
+                .ToListAsync();
+        }
+
+        //raamatu laenutamine: raamat peab olema saadaval, pärast laenutamist on saadavus false
+        public async Task<Loan> LoanBookAsync(Guid bookId, int readerId)
+        {
+            var book = await _context.Books.FindAsync(bookId);
+
+            if (book == null)
+                throw new InvalidOperationException("Raamatut ei leitud!");
+
+            if (!book.IsAvailable)
+                throw new InvalidOperationException("Raamat on juba välja laenutatud!");
+
+            var readerExists = await _context.Readers.AnyAsync(r => r.Id == readerId);
+
+            if (!readerExists)
+                throw new InvalidOperationException("Lugejat ei leitud!");
+
+            var loan = new Loan
+            {
+                BookId = bookId,
+                ReaderId = readerId,
+                LoanDate = DateTime.Now,
+                ReturnDate = null
+            };
+
+            book.IsAvailable = false;
+            book.ModifiedAt = DateTime.Now;
+
+            await _context.Loans.AddAsync(loan);
+            await _context.SaveChangesAsync();
+
+            return loan;
+        }
     }
 }

@@ -60,5 +60,16 @@
         <br />
     }
 
+    @* pealkirja muutmine *@
+    <form asp-action="UpdateTitle" asp-controller="library" method="post" class="row g-2 my-3">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="col-sm-4">
+            <input name="newTitle" class="form-control" placeholder="New title" value="@Model.Title" />
+        </div>
+        <div class="col-sm-2">
+            <input type="submit" value="Change title" class="btn btn-primary" />
+        </div>
+    </form>
+
     <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to List</a>
 </div>

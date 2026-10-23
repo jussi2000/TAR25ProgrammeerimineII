@@ -24,9 +24,29 @@ namespace ShopTAR25.Controllers
             _fileService = fileService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? title, int? year, bool borrowed = false)
         {
-            var result = _context.Books
+            IEnumerable<Book> books;
+
+            if (borrowed)
+            {
+                books = await _libraryService.GetCurrentlyBorrowedBooksAsync();
+            }
+            else if (year.HasValue)
+            {
+                books = await _libraryService.GetBooksByYearAsync(year.Value);
+            }
+            else if (!string.IsNullOrWhiteSpace(title))
+            {
+                var book = await _libraryService.GetBookByTitleAsync(title);
+                books = book == null ? new List<Book>() : new List<Book> { book };
+            }
+            else
+            {
+                books = await _context.Books.ToListAsync();
+            }
+
+            var result = books
                 .Select(x => new LibraryIndexViewModel
                 {
                     Id = x.Id,
@@ -34,7 +54,12 @@ namespace ShopTAR25.Controllers
                     Author = x.Author,
                     PublishedYear = x.PublishedYear,
                     IsAvailable = x.IsAvailable
-                });
+                }).ToList();
+
+            ViewBag.SearchTitle = title;
+            ViewBag.Year = year;
+            ViewBag.Borrowed = borrowed;
+            ViewBag.Readers = await _libraryService.GetReadersAsync();
 
             return View(result);
         }
@@ -207,26 +232,105 @@ namespace ShopTAR25.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
-            var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
-            if (book != null)
+            var images = await _context.FileToApis
+                .Where(x => x.BookId == id)
+                .Select(y => new FileToApiDto
+                {
+                    Id = y.Id,
+                    ExistingFilePath = y.ExistingFilePath,
+                    LibraryId = y.BookId
+                }).ToArrayAsync();
+
+            try
             {
-                //kustutame ka raamatu failid
-                var images = await _context.FileToApis
-                    .Where(x => x.BookId == id)
-                    .Select(y => new FileToApiDto
-                    {
-                        Id = y.Id,
-                        ExistingFilePath = y.ExistingFilePath,
-                        LibraryId = y.BookId
-                    }).ToArrayAsync();
+                await _libraryService.DeleteBookAsync(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction(nameof(Delete), new { id });
+            }
 
-                await _fileService.RemoveImagesFromApi(images);
+            //kustutame ka raamatu failid
+            await _fileService.RemoveImagesFromApi(images);
 
-                _context.Books.Remove(book);
-                await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateTitle(Guid id, string newTitle)
+        {
+            if (!string.IsNullOrWhiteSpace(newTitle))
+            {
+                await _libraryService.UpdateBookTitleAsync(id, newTitle);
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        //raamatu laenutamine
+        [HttpPost]
+        public async Task<IActionResult> LoanBook(Guid bookId, int readerId)
+        {
+            try
+            {
+                await _libraryService.LoanBookAsync(bookId, readerId);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        //lugejate nimekiri ja lugeja lisamise vorm
+        [HttpGet]
+        public async Task<IActionResult> Readers()
+        {
+            var readers = await _libraryService.GetReadersAsync();
+            return View(readers);
+        }
+
+        //lugeja lisamine
+        [HttpPost]
+        public async Task<IActionResult> AddReader(string fullName, string email)
+        {
+            if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(email))
+            {
+                TempData["Error"] = "Nimi ja e-post on kohustuslikud.";
+                return RedirectToAction(nameof(Readers));
+            }
+
+            await _libraryService.AddReaderAsync(fullName, email);
+
+            return RedirectToAction(nameof(Readers));
+        }
+
+        //ühe konkreetse lugeja laenutused
+        [HttpGet]
+        public async Task<IActionResult> ReaderLoans(int id)
+        {
+            var reader = await _context.Readers.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reader == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.ReaderName = reader.FullName;
+            ViewBag.ReaderId = reader.Id;
+
+            var loans = await _libraryService.GetLoansByReaderAsync(id);
+            return View(loans);
+        }
+
+        // raamatu tagastamine
+        [HttpPost]
+        public async Task<IActionResult> ReturnBook(int loanId, int readerId)
+        {
+            await _libraryService.ReturnBookAsync(loanId);
+
+            return RedirectToAction(nameof(ReaderLoans), new { id = readerId });
         }
 
         [HttpPost]
