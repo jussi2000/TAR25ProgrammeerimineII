@@ -26,7 +26,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
                 Title = dto.Title,
                 Author = dto.Author,
                 PublishedYear = dto.PublishedYear,
-                IsAvailable = dto.IsAvailable,
+                IsAvailable = true,
                 CreatedAt = DateTime.Now,
                 ModifiedAt = DateTime.Now
             };
@@ -68,6 +68,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
         {
             return await _context.Loans
                 .Include(l => l.Book)
+                .Include(l => l.Reader)          // <-- uus rida
                 .Where(l => l.ReaderId == readerId)
                 .ToListAsync();
         }

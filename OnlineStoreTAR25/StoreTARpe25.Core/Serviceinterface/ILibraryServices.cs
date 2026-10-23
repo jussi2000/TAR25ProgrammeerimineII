@@ -14,5 +14,10 @@ namespace ShopTARpe25.Core.Serviceinterface
         Task<Book> UpdateBookTitleAsync(Guid bookId, string newTitle);
         Task<bool> ReturnBookAsync(int loanId);
         Task<bool> DeleteBookAsync(Guid bookId);
+
+        //lugejad ja laenutused
+        Task<Reader> AddReaderAsync(string fullName, string email);
+        Task<IEnumerable<Reader>> GetReadersAsync();
+        Task<Loan> LoanBookAsync(Guid bookId, int readerId);
     }
 }
