@@ -44,6 +44,19 @@ else
         </div>
     </div>
 
+    @if (Model.Id != Guid.Empty)
+    {
+        <div class="form-group row">
+            <label asp-for="CreatedAt" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">@Html.DisplayFor(model => model.CreatedAt)</div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">@Html.DisplayFor(model => model.ModifiedAt)</div>
+        </div>
+    }
+
     <div class="form-group row">
         <label asp-for="Files" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-5">

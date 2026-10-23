@@ -130,7 +130,9 @@ namespace ShopTAR25.Controllers
                 Title = book.Title,
                 Author = book.Author,
                 PublishedYear = book.PublishedYear,
-                IsAvailable = book.IsAvailable
+                IsAvailable = book.IsAvailable,
+                CreatedAt = book.CreatedAt,
+                ModifiedAt = book.ModifiedAt
             };
 
             vm.Images.AddRange(images);
@@ -152,6 +154,14 @@ namespace ShopTAR25.Controllers
             book.PublishedYear = vm.PublishedYear;
             book.IsAvailable = vm.IsAvailable;
             book.ModifiedAt = DateTime.Now;
+
+            //uued failid, mis update vormis lisati
+            var dto = new LibraryDto
+            {
+                Id = book.Id,
+                Files = vm.Files
+            };
+            _fileService.FilesToApi(dto, book);
 
             _context.Books.Update(book);
             await _context.SaveChangesAsync();
@@ -184,7 +194,9 @@ namespace ShopTAR25.Controllers
                 Title = book.Title,
                 Author = book.Author,
                 PublishedYear = book.PublishedYear,
-                IsAvailable = book.IsAvailable
+                IsAvailable = book.IsAvailable,
+                CreatedAt = book.CreatedAt,
+                ModifiedAt = book.ModifiedAt
             };
 
             vm.Images.AddRange(images);
@@ -198,6 +210,18 @@ namespace ShopTAR25.Controllers
             var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
             if (book != null)
             {
+                //kustutame ka raamatu failid
+                var images = await _context.FileToApis
+                    .Where(x => x.BookId == id)
+                    .Select(y => new FileToApiDto
+                    {
+                        Id = y.Id,
+                        ExistingFilePath = y.ExistingFilePath,
+                        LibraryId = y.BookId
+                    }).ToArrayAsync();
+
+                await _fileService.RemoveImagesFromApi(images);
+
                 _context.Books.Remove(book);
                 await _context.SaveChangesAsync();
             }
@@ -213,6 +237,11 @@ namespace ShopTAR25.Controllers
                 Id = vm.ImageId
             };
             var image = await _fileService.RemoveImageFromApi(dto);
+
+            if (image?.BookId != null)
+            {
+                return RedirectToAction(nameof(Update), new { id = image.BookId });
+            }
 
             return RedirectToAction(nameof(Index));
         }

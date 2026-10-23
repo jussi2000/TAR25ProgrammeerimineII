@@ -10,21 +10,29 @@ namespace OnlineStoreTAR25ApplicationServices.Services
     public class LibraryServices : ILibraryServices
     {
         private readonly LibraryContext _context;
+        private readonly IFileServices _fileServices;
 
-        public LibraryServices(LibraryContext context)
+        public LibraryServices(LibraryContext context, IFileServices fileServices)
         {
             _context = context;
+            _fileServices = fileServices;
         }
 
         public async Task<Book> AddBookAsync(LibraryDto dto)
         {
             var book = new Book
             {
+                Id = Guid.NewGuid(),
                 Title = dto.Title,
                 Author = dto.Author,
                 PublishedYear = dto.PublishedYear,
-                IsAvailable = true
+                IsAvailable = dto.IsAvailable,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
             };
+
+            //salvestab failid wwwroot/multipleFileUpload kausta ja seob need raamatuga
+            _fileServices.FilesToApi(dto, book);
 
             await _context.Books.AddAsync(book);
             await _context.SaveChangesAsync();

@@ -45,6 +45,8 @@ namespace OnlineStoreTAR25
             }
 
             app.UseHttpsRedirection();
+            //vajalik, et käivitamise ajal üles laetud failid (wwwroot/multipleFileUpload) oleksid nähtavad
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();

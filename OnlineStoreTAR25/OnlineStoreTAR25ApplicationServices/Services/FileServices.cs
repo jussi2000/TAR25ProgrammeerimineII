@@ -27,20 +27,20 @@ namespace ShopTARpe25.ApplicationServices.Services
         public void FilesToApi(LibraryDto dto, Book domain)
         {
             //kindlasti peab ankeedil olema üks fail 
-            if(dto.Files != null && dto.Files.Count > 0)
+            if (dto.Files != null && dto.Files.Count > 0)
             {
-                //kui ei ole wwwroot'is multipleFileUpload directoryt
-                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
+                //meil on vaja teha muutuja nimega uploadsFolder
+                //sinna muutuja taha on vaja Path kombineeria
+                string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+
+                //kui ei ole wwwroot'is multipleFileUpload directoryt, siis tee see
+                if (!Directory.Exists(uploadsFolder))
                 {
-                    //, siis tee directory wwwrooti alla
-                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
+                    Directory.CreateDirectory(uploadsFolder);
                 }
 
                 foreach (var file in dto.Files)
                 {
-                    //meil on vaja teha muutuja nimega uploadsFolder
-                    //sinna muutuja taha on vaja Path kombineeria
-                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     //igale failile unikaalne Guid selle nime ette
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -55,7 +55,7 @@ namespace ShopTARpe25.ApplicationServices.Services
                             //tuleb ära mappida
                             //domain ja ??
                             Id = Guid.NewGuid(),
-                            ExistingFilePath =  uniqueFileName,
+                            ExistingFilePath = uniqueFileName,
                             BookId = domain.Id
                         };
 
@@ -64,19 +64,24 @@ namespace ShopTARpe25.ApplicationServices.Services
                     }
                 }
             }
-       }
+        }
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
         {
             //kui on vaja kustutada fail, siis tuleb see üles leida
             var imageId = await _context.FileToApis
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
+            if (imageId == null)
+            {
+                return null;
+            }
+
             //kus asuvad failid, mida hakatakse kasutama
-            var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                + imageId.ExistingFilePath;
+            var filePath = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload",
+                imageId.ExistingFilePath);
 
             //kui fail on olemas, siis see kustutab selle
-            if(File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
@@ -93,8 +98,13 @@ namespace ShopTARpe25.ApplicationServices.Services
                 var imageId = await _context.FileToApis
                     .FirstOrDefaultAsync(x => x.Id == image.Id);
 
-                var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + imageId.ExistingFilePath;
+                if (imageId == null)
+                {
+                    continue;
+                }
+
+                var filePath = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload",
+                    imageId.ExistingFilePath);
 
                 if (File.Exists(filePath))
                 {
