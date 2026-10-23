@@ -114,14 +114,17 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             if (book == null)
                 return false;
 
-            var hasLoans = await _context.Loans
-                .AnyAsync(l => l.BookId == bookId);
+            var hasActiveLoans = await _context.Loans
+                .AnyAsync(l => l.BookId == bookId && l.ReturnDate == null);
 
-            if (hasLoans)
+            if (hasActiveLoans)
             {
                 throw new InvalidOperationException(
-                    "Raamatut ei saa kustutada, kuna see on seotud laenutustega.");
+                    "Raamatut ei saa kustutada, kuna see on praegu laenutuses.");
             }
+
+            var returnedLoans = _context.Loans.Where(l => l.BookId == bookId);
+            _context.Loans.RemoveRange(returnedLoans);
 
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
@@ -143,12 +146,50 @@ namespace OnlineStoreTAR25ApplicationServices.Services
             return reader;
         }
 
-        public async Task<IEnumerable<Reader>> GetReadersAsync()
+        //lugejad, soovi korral otsing nime või e-posti järgi
+        public async Task<IEnumerable<Reader>> GetReadersAsync(string? search = null)
         {
-            return await _context.Readers
+            var query = _context.Readers
                 .Include(r => r.Loans)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(r =>
+                    r.FullName.ToLower().Contains(search.ToLower()) ||
+                    r.Email.ToLower().Contains(search.ToLower()));
+            }
+
+            return await query
                 .OrderBy(r => r.FullName)
                 .ToListAsync();
+        }
+
+        //lugeja kustutamine: ei saa kustutada, kui tal on tagastamata raamatuid
+        public async Task<bool> DeleteReaderAsync(int readerId)
+        {
+            var reader = await _context.Readers.FindAsync(readerId);
+
+            if (reader == null)
+                return false;
+
+            var hasActiveLoans = await _context.Loans
+                .AnyAsync(l => l.ReaderId == readerId && l.ReturnDate == null);
+
+            if (hasActiveLoans)
+            {
+                throw new InvalidOperationException(
+                    "Lugejat ei saa kustutada, kuna tal on tagastamata raamatuid.");
+            }
+
+            //tagastatud laenutused kustutame koos lugejaga
+            var returnedLoans = _context.Loans.Where(l => l.ReaderId == readerId);
+            _context.Loans.RemoveRange(returnedLoans);
+
+            _context.Readers.Remove(reader);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         //raamatu laenutamine: raamat peab olema saadaval, pärast laenutamist on saadavus false

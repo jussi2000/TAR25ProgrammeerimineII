@@ -17,7 +17,8 @@ namespace ShopTARpe25.Core.Serviceinterface
 
         //lugejad ja laenutused
         Task<Reader> AddReaderAsync(string fullName, string email);
-        Task<IEnumerable<Reader>> GetReadersAsync();
+        Task<IEnumerable<Reader>> GetReadersAsync(string? search = null);
+        Task<bool> DeleteReaderAsync(int readerId);
         Task<Loan> LoanBookAsync(Guid bookId, int readerId);
     }
 }

@@ -76,9 +76,9 @@
             rownumber++;
             @* iga uus rida on +1 id number *@
         }
+        @if (!Model.Any())
+        {
+            <tr><td colspan="7">No books found.</td></tr>
+        }
     </tbody>
-    @if (!Model.Any())
-    {
-        <tr><td colspan="7">No books found.</td></tr>
-    }
 </table>

@@ -15,6 +15,16 @@
 </form>
 
 <h2>Readers</h2>
+@* otsing nime või e-posti järgi *@
+<form method="get" asp-action="Readers" asp-controller="Library" class="row g-2 mb-3">
+    <div class="col-sm-4">
+        <input name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by name or email" />
+    </div>
+    <div class="col-sm-3">
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <a asp-action="Readers" asp-controller="Library" class="btn btn-link">Clear</a>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -38,6 +48,10 @@
                 <td>@reader.Loans.Count(l => l.ReturnDate == null)</td>
                 <td>
                     <a asp-action="ReaderLoans" asp-route-id="@reader.Id" class="btn btn-warning">Loans</a>
+                    <form asp-action="DeleteReader" asp-controller="Library" asp-route-id="@reader.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Kas oled kindel, et soovid lugeja kustutada?');">
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
                 </td>
             </tr>
             rownumber++;

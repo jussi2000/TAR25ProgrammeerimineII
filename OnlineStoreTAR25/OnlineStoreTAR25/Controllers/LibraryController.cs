@@ -174,7 +174,10 @@ namespace ShopTAR25.Controllers
                 return NotFound();
             }
 
-            book.Title = vm.Title;
+            if (book.Title != vm.Title)
+            {
+                await _libraryService.UpdateBookTitleAsync(book.Id, vm.Title);
+            }
             book.Author = vm.Author;
             book.PublishedYear = vm.PublishedYear;
             book.IsAvailable = vm.IsAvailable;
@@ -256,16 +259,6 @@ namespace ShopTAR25.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [HttpPost]
-        public async Task<IActionResult> UpdateTitle(Guid id, string newTitle)
-        {
-            if (!string.IsNullOrWhiteSpace(newTitle))
-            {
-                await _libraryService.UpdateBookTitleAsync(id, newTitle);
-            }
-
-            return RedirectToAction(nameof(Details), new { id });
-        }
 
         //raamatu laenutamine
         [HttpPost]
@@ -283,12 +276,28 @@ namespace ShopTAR25.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //lugejate nimekiri ja lugeja lisamise vorm
         [HttpGet]
-        public async Task<IActionResult> Readers()
+        public async Task<IActionResult> Readers(string? search)
         {
-            var readers = await _libraryService.GetReadersAsync();
+            var readers = await _libraryService.GetReadersAsync(search);
+            ViewBag.Search = search;
             return View(readers);
+        }
+
+        //lugeja kustutamine
+        [HttpPost]
+        public async Task<IActionResult> DeleteReader(int id)
+        {
+            try
+            {
+                await _libraryService.DeleteReaderAsync(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Readers));
         }
 
         //lugeja lisamine
