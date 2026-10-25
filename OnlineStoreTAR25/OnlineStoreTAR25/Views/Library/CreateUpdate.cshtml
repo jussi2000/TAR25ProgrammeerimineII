@@ -9,7 +9,7 @@ else
     <h1>Book Create</h1>
 }
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="book-form">
     <div>
         Book Details
     </div>
@@ -20,6 +20,7 @@ else
         <label asp-for="Title" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
     </div>
 
@@ -27,6 +28,7 @@ else
         <label asp-for="Author" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
         </div>
     </div>
 
@@ -34,6 +36,7 @@ else
         <label asp-for="PublishedYear" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="PublishedYear" class="form-control" />
+            <span asp-validation-for="PublishedYear" class="text-danger"></span>
         </div>
     </div>
 
@@ -68,12 +71,14 @@ else
         </div>
     </div>
 
-    <div>
+    <div class="book-gallery">
         @foreach (var images in Model.Images)
         {
-            <partial name="_Images" model="images" />
-            <input asp-action="removeImage" asp-controller="library" asp-route-imageId="@images.ImageId"
-                   type="submit" class="btn btn-danger" value="Remove Image" />
+            <div class="book-image-item">
+                <partial name="_Images" model="images" />
+                <input asp-action="removeImage" asp-controller="library" asp-route-imageId="@images.ImageId"
+                       type="submit" formnovalidate class="btn btn-danger btn-sm" value="Remove Image" />
+            </div>
         }
     </div>
 
@@ -90,3 +95,6 @@ else
 
     <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to List</a>
 </form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

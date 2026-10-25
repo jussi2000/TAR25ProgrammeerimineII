@@ -54,11 +54,14 @@
         </div>
     </dl>
 
-    @foreach (var images in Model.Images)
-    {
-        <partial name="_Images" model="images" />
-        <br />
-    }
+    <div class="book-gallery compact">
+        @foreach (var images in Model.Images)
+        {
+            <div class="book-image-item">
+                <partial name="_Images" model="images" />
+            </div>
+        }
+    </div>
 
     <a asp-action="Index" asp-controller="library" class="btn btn-secondary">Back to List</a>
 </div>

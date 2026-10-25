@@ -49,7 +49,20 @@
                 <td>@book.Title</td>
                 <td>@book.Author</td>
                 <td>@book.PublishedYear</td>
-                <td>@(book.IsAvailable ? "Available" : "Borrowed")</td>
+                <td>
+                     @if (book.IsAvailable)
+                     {
+                       @:Available
+                     }
+                      else if (book.BorrowedBy != null)
+                     {
+                         @:Borrowed
+                     }
+                      else
+                     {
+                        @:Not available
+                     }
+                </td>
                 <td>
                     @* Nupud: details, update, delete *@
                     <a asp-action="details" asp-route-id="@book.Id" class="btn btn-warning">Details</a>
@@ -58,8 +71,13 @@
                 </td>
                 <td>
                     @* raamatu laenutamine*@
-                    @if (book.IsAvailable && readers != null && readers.Any())
+                    @if (book.BorrowedBy != null)
                     {
+                         <span>Borrowed by <strong>@book.BorrowedBy</strong></span>
+                    }
+                        else if (book.IsAvailable && readers != null && readers.Any())
+                    {
+
                         <form asp-action="LoanBook" asp-controller="Library" method="post" class="d-flex gap-1">
                             <input type="hidden" name="bookId" value="@book.Id" />
                             <select name="readerId" class="form-select form-select-sm">

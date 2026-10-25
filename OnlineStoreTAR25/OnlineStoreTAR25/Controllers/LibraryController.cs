@@ -46,6 +46,15 @@ namespace ShopTAR25.Controllers
                 books = await _context.Books.ToListAsync();
             }
 
+            // aktiivsed laenutused
+            var activeLoans = await _context.Loans
+                .Include(l => l.Reader)
+                .Where(l => l.ReturnDate == null)
+                .ToListAsync();
+            var borrowers = activeLoans
+                .GroupBy(l => l.BookId)
+                .ToDictionary(g => g.Key, g => g.First().Reader.FullName);
+
             var result = books
                 .Select(x => new LibraryIndexViewModel
                 {
@@ -53,7 +62,8 @@ namespace ShopTAR25.Controllers
                     Title = x.Title,
                     Author = x.Author,
                     PublishedYear = x.PublishedYear,
-                    IsAvailable = x.IsAvailable
+                    IsAvailable = x.IsAvailable,
+                    BorrowedBy = borrowers.TryGetValue(x.Id, out var name) ? name : null
                 }).ToList();
 
             ViewBag.SearchTitle = title;
@@ -74,12 +84,17 @@ namespace ShopTAR25.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(LibraryCreateUpdateViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("CreateUpdate", vm);
+            }
+
             var dto = new LibraryDto
             {
                 Id = vm.Id,
                 Title = vm.Title,
                 Author = vm.Author,
-                PublishedYear = vm.PublishedYear,
+                PublishedYear = vm.PublishedYear!.Value,
                 IsAvailable = vm.IsAvailable,
                 Files = vm.Files,
                 FileToApiDtos = vm.Images?
@@ -174,16 +189,33 @@ namespace ShopTAR25.Controllers
                 return NotFound();
             }
 
+            if (!ModelState.IsValid)
+            {
+                vm.CreatedAt = book.CreatedAt;
+                vm.ModifiedAt = book.ModifiedAt;
+
+                var existingImages = await _context.FileToApis
+                    .Where(x => x.BookId == vm.Id)
+                    .Select(y => new imageViewModel
+                    {
+                        FilePath = y.ExistingFilePath,
+                        ImageId = y.Id,
+                        BookId = y.BookId
+                    }).ToArrayAsync();
+                vm.Images.AddRange(existingImages);
+
+                return View("CreateUpdate", vm);
+            }
+
             if (book.Title != vm.Title)
             {
                 await _libraryService.UpdateBookTitleAsync(book.Id, vm.Title);
             }
             book.Author = vm.Author;
-            book.PublishedYear = vm.PublishedYear;
+            book.PublishedYear = vm.PublishedYear!.Value;
             book.IsAvailable = vm.IsAvailable;
             book.ModifiedAt = DateTime.Now;
 
-            //uued failid, mis update vormis lisati
             var dto = new LibraryDto
             {
                 Id = book.Id,
@@ -254,7 +286,7 @@ namespace ShopTAR25.Controllers
                 return RedirectToAction(nameof(Delete), new { id });
             }
 
-            //kustutame ka raamatu failid
+            //kustutame ka raamatu failid(pildid)
             await _fileService.RemoveImagesFromApi(images);
 
             return RedirectToAction(nameof(Index));

@@ -60,7 +60,7 @@ namespace OnlineStoreTAR25ApplicationServices.Services
         public async Task<IEnumerable<Book>> GetCurrentlyBorrowedBooksAsync()
         {
             return await _context.Books
-                .Where(b => b.IsAvailable == false)
+                .Where(b => _context.Loans.Any(l => l.BookId == b.Id && l.ReturnDate == null))
                 .ToListAsync();
         }
 

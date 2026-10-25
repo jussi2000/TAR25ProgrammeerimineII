@@ -7,5 +7,6 @@
         public string Author { get; set; }
         public int PublishedYear { get; set; }
         public bool IsAvailable { get; set; }
+        public string? BorrowedBy { get; set; }
     }
 }

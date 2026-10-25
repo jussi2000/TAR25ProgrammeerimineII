@@ -67,54 +67,57 @@ namespace ShopTARpe25.ApplicationServices.Services
         }
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
         {
-            //kui on vaja kustutada fail, siis tuleb see üles leida
-            var imageId = await _context.FileToApis
+            var image = await _context.FileToApis
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            if (imageId == null)
+            if (image == null)
             {
                 return null;
             }
 
-            //kus asuvad failid, mida hakatakse kasutama
-            var filePath = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload",
-                imageId.ExistingFilePath);
+            DeleteFileFromDisk(image.ExistingFilePath);
 
-            //kui fail on olemas, siis see kustutab selle
+            _context.FileToApis.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return image;
+        }
+
+        public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dto)
+        {
+            foreach (var item in dto)
+            {
+                var image = await _context.FileToApis
+                    .FirstOrDefaultAsync(x => x.Id == item.Id);
+
+                // fail kustutatakse kettalt alati, ka siis kui andmebaasi rida ei leitud
+                DeleteFileFromDisk(image?.ExistingFilePath ?? item.ExistingFilePath);
+
+                if (image != null)
+                {
+                    _context.FileToApis.Remove(image);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return new List<FileToApi>();
+        }
+
+        private void DeleteFileFromDisk(string? fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return;
+            }
+
+            var filePath = Path.Combine(
+                _webHost.ContentRootPath, "wwwroot", "multipleFileUpload",
+                Path.GetFileName(fileName));
+
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
-
-            _context.FileToApis.Remove(imageId);
-            await _context.SaveChangesAsync();
-
-            return imageId;
-        }
-        public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dto)
-        {
-            foreach (var image in dto)
-            {
-                var imageId = await _context.FileToApis
-                    .FirstOrDefaultAsync(x => x.Id == image.Id);
-
-                if (imageId == null)
-                {
-                    continue;
-                }
-
-                var filePath = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload",
-                    imageId.ExistingFilePath);
-
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-                _context.FileToApis.Remove(imageId);
-                await _context.SaveChangesAsync();
-            }
-
-            return null;
         }
     }
 }
