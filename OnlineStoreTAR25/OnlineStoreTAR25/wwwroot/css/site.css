@@ -1,173 +1,27 @@
-/* Globals & Teema muutujad */
-:root {
-    --bg: #ffffff;
-    --accent-bg: #f4f4f6;
-    --text: #222222;
-    --text-light: #555555;
-    --border: #dcdee2;
-    --accent: #0066cc;
-    --accent-hover: #004499;
-    --max-width: 800px;
+html {
+    font-size: 14px;
 }
 
-/* Automaatne Dark Mode */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #1a1a1a;
-        --accent-bg: #2d2d2d;
-        --text: #f0f0f0;
-        --text-light: #b0b0b0;
-        --border: #444444;
-        --accent: #3399ff;
-        --accent-hover: #66b2ff;
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
     }
 }
 
-/* Baasseaded */
-* {
-    box-sizing: border-box;
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    color: var(--text);
-    background-color: var(--bg);
-    margin: 0;
-    padding: 1rem;
+    margin-bottom: 60px;
 }
-
-/* Paigutus (Layout) */
-header, main, footer {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 1rem 0;
-}
-
-header {
-    border-bottom: 1px solid var(--border);
-}
-
-footer {
-    border-top: 1px solid var(--border);
-    margin-top: 3rem;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    text-align: center;
-}
-
-/* Tüpograafia */
-h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-}
-
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.4rem; }
-
-p {
-    margin-top: 0;
-    margin-bottom: 1.25rem;
-}
-
-a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Navigatsioon */
-nav {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-nav a {
-    font-weight: 500;
-}
-
-/* Nupud ja Vormid */
-button, .button, input[type="submit"] {
-    background-color: var(--accent);
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-button:hover, .button:hover, input[type="submit"]:hover {
-    background-color: var(--accent-hover);
-    text-decoration: none;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background-color: var(--bg);
-    color: var(--text);
-}
-
-/* Tabelid, Pildid ja Kood */
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-}
-
-th, td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background-color: var(--accent-bg);
-}
-
-blockquote {
-    margin: 1.5rem 0;
-    padding: 0.5rem 1rem;
-    border-left: 4px solid var(--accent);
-    background-color: var(--accent-bg);
-    color: var(--text-light);
-}
-
-code, pre {
-    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-    background-color: var(--accent-bg);
-    border-radius: 3px;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.9rem;
-}
-
-pre {
-    padding: 1rem;
-    overflow-x: auto;
-}
-
-pre code {
-    padding: 0;
-    background-color: transparent;
-}
-
 
 /*Kukke tants (GIF)
 
@@ -179,3 +33,4 @@ body {
     margin: 0;
     margin-bottom: 60px;
 }*/
+
