@@ -23,8 +23,9 @@ body {
     margin-bottom: 60px;
 }
 
-/*Kukke tants (GIF)
+/*Kukke tants (GIF)*/
 
+/*
 body {
     background-image: url('https://media.giphy.com/media/ybnrXkdf8jAxIkMuwr/giphy.gif');
     background-size: cover;
@@ -34,3 +35,92 @@ body {
     margin-bottom: 60px;
 }*/
 
+.kg-index {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-left: 5px solid #2d6a4f;
+    background: #f1faf4;
+}
+
+    .kg-index h2 {
+        color: #2d6a4f;
+    }
+
+    .kg-index .kg-btn-main {
+        color: #fff;
+        background-color: #2d6a4f;
+        border-color: #2d6a4f;
+    }
+
+.kg-create {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-left: 5px solid #1b6ec2;
+    background: #f0f6fd;
+}
+
+    .kg-create h2 {
+        color: #1b6ec2;
+    }
+
+    .kg-create .kg-btn-main {
+        color: #fff;
+        background-color: #1b6ec2;
+        border-color: #1b6ec2;
+    }
+
+.kg-details {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-left: 5px solid #b5651d;
+    background: #fdf6ee;
+}
+
+    .kg-details h1 {
+        color: #b5651d;
+    }
+
+    .kg-details .kg-btn-main {
+        color: #fff;
+        background-color: #b5651d;
+        border-color: #b5651d;
+    }
+
+.kg-update {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-left: 5px solid #f4a261;
+    background: #fff8f0;
+}
+
+    .kg-update h1 {
+        color: #e76f51;
+    }
+
+    .kg-update .kg-btn-main {
+        color: #fff;
+        background-color: #e76f51;
+        border-color: #e76f51;
+    }
+
+.kg-delete {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-left: 5px solid #dc3545;
+    background: #fff5f5;
+}
+
+    .kg-delete h1 {
+        color: #dc3545;
+    }
+
+    .kg-delete .kg-btn-main {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
