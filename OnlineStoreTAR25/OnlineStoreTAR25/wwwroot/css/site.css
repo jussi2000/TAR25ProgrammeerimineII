@@ -19,8 +19,12 @@ html {
     min-height: 100%;
 }
 
+/*täpiline tagataust*/
 body {
     margin-bottom: 60px;
+    background-color: #ffffff;
+    background-image: radial-gradient(#d0dec5 3px, transparent 2px);
+    background-size: 24px 24px;
 }
 
 /*Kukke tants (GIF)*/
@@ -35,6 +39,7 @@ body {
     margin-bottom: 60px;
 }*/
 
+/*Indexi vaade*/
 .kg-index {
     max-width: 1100px;
     margin: 1rem auto;
@@ -53,6 +58,7 @@ body {
         border-color: #2d6a4f;
     }
 
+/*Create vaade*/
 .kg-create {
     max-width: 1100px;
     margin: 1rem auto;
@@ -71,6 +77,7 @@ body {
         border-color: #1b6ec2;
     }
 
+/*Details vaade*/
 .kg-details {
     max-width: 1100px;
     margin: 1rem auto;
@@ -89,6 +96,7 @@ body {
         border-color: #b5651d;
     }
 
+/*Update vaade*/
 .kg-update {
     max-width: 1100px;
     margin: 1rem auto;
@@ -107,6 +115,7 @@ body {
         border-color: #e76f51;
     }
 
+/*Delete vaade*/
 .kg-delete {
     max-width: 1100px;
     margin: 1rem auto;
