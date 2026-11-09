@@ -1,61 +1,57 @@
-﻿using ShopTARpe25.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
+using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShopTARpe25.ApplicationServices.Services
 {
-    public class RealEstateServices
+    public class RealEstateServices : IRealEstateServices
     {
         private readonly ShopTARpe25Context _context;
 
-        public FileServices(ShopTARpe25Context context)
+        public RealEstateServices(ShopTARpe25Context context)
         {
             _context = context;
         }
 
-        public async Task<FileToApi> UploadFilesToApi(FileToApiDto dto)
+        public async Task<RealEstate> Create(RealEstateDto dto)
         {
-            if (dto.File != null)
-            {
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "multipleFileUpload");
+            RealEstate domain = new RealEstate();
 
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
+            domain.Id = Guid.NewGuid();
+            domain.Area = dto.Area;
+            domain.Address = dto.Address;
+            domain.RoomNumber = dto.RoomNumber;
+            domain.BuildingType = dto.BuildingType;
+            domain.CreatedAt = DateTime.Now;
+            domain.ModifiedAt = DateTime.Now;
 
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + dto.File.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+             _context.RealEstates.Update(domain);
+            await _context.SaveChangesAsync();
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await dto.File.CopyToAsync(fileStream);
-                }
+            return domain;
+        }
+        public async Task<RealEstate> DetailAsync(Guid id)
+        {
+            var result = await _context.RealEstates
+                .FirstOrDefaultAsync(x=> x.Id == id);
 
-                var domain = new FileToApi
-                {
-                    Id = Guid.NewGuid(),
-                    FileUrl = uniqueFileName,
-                    RealEstateId = dto.RealEstateId
-                };
-
-                await _context.FilesToApi.AddAsync(domain);
-                await _context.SaveChangesAsync();
-
-                return domain;
-            }
-
-            return null;
+            return result;
         }
 
-        public async Task<FileToApi> RemoveImage(FileToApiDto dto)
+        public async Task<RealEstate> Delete(Guid id)
         {
-            return null;
+            var result = await _context.RealEstates
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            await _context.RealEstates
+                .Where(x => x.Id == id)
+                .ExecuteDeleteAsync();
+
+            await _context.SaveChangesAsync();
+
+            return result;
         }
-    }
-}
     }
 }
