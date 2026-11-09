@@ -15,6 +15,7 @@ namespace ShopTARpe25.Data
         //nimega Spaceship
         public DbSet<Spaceship> Spaceships { get; set; }
         public DbSet<FileToApi> FileToApis { get; set; }
+        public DbSet<RealEstate> RealEstates { get; set; }
 
     }
 }
