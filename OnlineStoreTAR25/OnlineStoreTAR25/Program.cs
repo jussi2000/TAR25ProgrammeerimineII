@@ -23,6 +23,7 @@ namespace OnlineStoreTAR25
 
             //see on dependency injection, mis võimaldab meil kasutada teenuseid controllerites
             builder.Services.AddScoped<IspaceshipServices, SpaceshipServices>();
+            builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
             builder.Services.AddScoped<IFileServices, FileServices>();
 
             //ühendame andmebaasiga vvv
