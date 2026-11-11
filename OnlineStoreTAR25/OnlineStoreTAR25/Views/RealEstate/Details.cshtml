@@ -1,5 +1,23 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model ShopTARpe25.Models.RealEstate.RealEstateDetailsViewModel
+
+<div class="page-header">
+    <h2>@Model.Address</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">&larr; Back to list</a>
+</div>
+
+<div class="card-soft">
+    <dl class="row info-list mb-0">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9 text-muted small">@Model.Id</dd>
+        <dt class="col-sm-3">Area</dt>
+        <dd class="col-sm-9">@Model.Area</dd>
+        <dt class="col-sm-3">Rooms</dt>
+        <dd class="col-sm-9">@Model.RoomNumber</dd>
+        <dt class="col-sm-3">Building type</dt>
+        <dd class="col-sm-9">@Model.BuildingType</dd>
+        <dt class="col-sm-3">Created</dt>
+        <dd class="col-sm-9">@Model.CreatedAt?.ToString("dd.MM.yyyy HH:mm")</dd>
+        <dt class="col-sm-3">Modified</dt>
+        <dd class="col-sm-9">@Model.ModifiedAt?.ToString("dd.MM.yyyy HH:mm")</dd>
+    </dl>
+</div>

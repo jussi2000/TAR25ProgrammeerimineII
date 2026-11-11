@@ -1,5 +1,47 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<ShopTARpe25.Models.RealEstate.RealEstateIndexViewModel>
+
+<div class="page-header">
+    <h2>Real estates</h2>
+    <a asp-action="Create" class="btn btn-primary">+ New real estate</a>
+</div>
+
+<div class="card-soft p-0 overflow-hidden">
+    <table class="table table-modern">
+        <thead>
+            <tr>
+                <th class="ps-4">Nr</th>
+                <th>Address</th>
+                <th>Area</th>
+                <th>Rooms</th>
+                <th>Building type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int rownumber = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="ps-4 text-muted">@rownumber</td>
+                    <td class="fw-semibold">@item.Address</td>
+                    <td>@item.Area</td>
+                    <td>@item.RoomNumber</td>
+                    <td><span class="badge rounded-pill text-bg-light border">@item.BuildingType</span></td>
+                    <td class="text-end pe-4">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Update</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                rownumber++;
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <p class="text-center text-muted py-5 mb-0">No real estates yet. Create the first one!</p>
+    }
+</div>

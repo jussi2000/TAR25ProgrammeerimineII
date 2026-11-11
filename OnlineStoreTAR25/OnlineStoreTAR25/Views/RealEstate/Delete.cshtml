@@ -1,5 +1,24 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model ShopTARpe25.Models.RealEstate.RealEstateDeleteViewModel
+
+<div class="page-header">
+    <h2>Delete real estate</h2>
+</div>
+
+<div class="card-soft">
+    <div class="alert alert-danger">Are you sure you want to delete <strong>@Model.Address</strong>? This cannot be undone.</div>
+
+    <dl class="row info-list mb-0">
+        <dt class="col-sm-3">Area</dt>
+        <dd class="col-sm-9">@Model.Area</dd>
+        <dt class="col-sm-3">Rooms</dt>
+        <dd class="col-sm-9">@Model.RoomNumber</dd>
+        <dt class="col-sm-3">Building type</dt>
+        <dd class="col-sm-9">@Model.BuildingType</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmation" class="mt-4 d-flex gap-2">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

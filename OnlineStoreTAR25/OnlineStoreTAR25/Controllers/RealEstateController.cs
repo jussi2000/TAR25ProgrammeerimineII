@@ -1,83 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopTARpe25.Core.Dto;
-using ShopTARpe25.Core.Serviceinterface;
-using ShopTARpe25.Data;
+using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Models.RealEstate;
 
 namespace ShopTARpe25.Controllers
 {
     public class RealEstateController : Controller
     {
-        private readonly ShopTARpe25Context _context;
         private readonly IRealEstateServices _realEstateServices;
 
-        public RealEstateController(
-            ShopTARpe25Context context,
-            IRealEstateServices realEstateServices)
+        public RealEstateController(IRealEstateServices realEstateServices)
         {
-            _context = context;
             _realEstateServices = realEstateServices;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _realEstateServices.Index()
+            var result = (await _realEstateServices.GetAll())
                 .Select(x => new RealEstateIndexViewModel
                 {
                     Id = x.Id,
-                    Address = x.Address,
                     Area = x.Area,
+                    Address = x.Address,
                     RoomNumber = x.RoomNumber,
-                    BuildingType = x.BuildingType
-
-                });
+                    BuildingType = x.BuildingType,
+                    CreatedAt = x.CreatedAt,
+                    ModifiedAt = x.ModifiedAt,
+                })
+                .ToList();
 
             return View(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var result = await _realEstateServices.DetailAsync(id);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            var vm = new RealEstateDetailsViewModel
-            {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-                CreatedAt = result.CreatedAt,
-                ModifiedAt = result.ModifiedAt
-            };
-
-            return View(vm);
-        }
-
-        [HttpGet]
         public IActionResult Create()
         {
-            RealEstateCreateUpdateViewModel model = new();
-            return View("CreateUpdate", model);
+            RealEstateCreateUpdateViewModel vm = new();
+
+            return View("CreateUpdate", vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RealEstateCreateUpdateViewModel model)
+        public async Task<IActionResult> Create(RealEstateCreateUpdateViewModel vm)
         {
             var dto = new RealEstateDto()
             {
-                Area = model.Area,
-                Address = model.Address,
-                RoomNumber = model.RoomNumber,
-                BuildingType = model.BuildingType,
-                CreatedAt = model.CreatedAt,
-                ModifiedAt = model.ModifiedAt
+                Area = vm.Area,
+                Address = vm.Address,
+                RoomNumber = vm.RoomNumber,
+                BuildingType = vm.BuildingType,
             };
 
             await _realEstateServices.Create(dto);
@@ -86,41 +57,62 @@ namespace ShopTARpe25.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _realEstateServices.DetailAsync(id);
+            var realEstate = await _realEstateServices.DetailAsync(id);
 
-            if (result == null)
+            if (realEstate == null)
             {
                 return NotFound();
             }
 
-            var vm = new RealEstateCreateUpdateViewModel
+            var vm = new RealEstateDetailsViewModel();
+
+            vm.Id = realEstate.Id;
+            vm.Area = realEstate.Area;
+            vm.Address = realEstate.Address;
+            vm.RoomNumber = realEstate.RoomNumber;
+            vm.BuildingType = realEstate.BuildingType;
+            vm.CreatedAt = realEstate.CreatedAt;
+            vm.ModifiedAt = realEstate.ModifiedAt;
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var realEstate = await _realEstateServices.DetailAsync(id);
+
+            if (realEstate == null)
             {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-                CreatedAt = result.CreatedAt,
-                ModifiedAt = result.ModifiedAt
-            };
+                return NotFound();
+            }
+
+            var vm = new RealEstateCreateUpdateViewModel();
+
+            vm.Id = realEstate.Id;
+            vm.Area = realEstate.Area;
+            vm.Address = realEstate.Address;
+            vm.RoomNumber = realEstate.RoomNumber;
+            vm.BuildingType = realEstate.BuildingType;
+            vm.CreatedAt = realEstate.CreatedAt;
+            vm.ModifiedAt = realEstate.ModifiedAt;
 
             return View("CreateUpdate", vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel model)
+        public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel vm)
         {
             var dto = new RealEstateDto()
             {
-                Id = model.Id,
-                Area = model.Area,
-                Address = model.Address,
-                RoomNumber = model.RoomNumber,
-                BuildingType = model.BuildingType,
-                CreatedAt = model.CreatedAt,
-                ModifiedAt = model.ModifiedAt
+                Id = vm.Id,
+                Area = vm.Area,
+                Address = vm.Address,
+                RoomNumber = vm.RoomNumber,
+                BuildingType = vm.BuildingType,
+                CreatedAt = vm.CreatedAt,
             };
 
             await _realEstateServices.Update(dto);
@@ -131,21 +123,22 @@ namespace ShopTARpe25.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _realEstateServices.DetailAsync(id);
+            var realEstate = await _realEstateServices.DetailAsync(id);
 
-            if (result == null)
+            if (realEstate == null)
             {
                 return NotFound();
             }
 
-            var vm = new RealEstateDeleteViewModel
-            {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-            };
+            var vm = new RealEstateDeleteViewModel();
+
+            vm.Id = realEstate.Id;
+            vm.Area = realEstate.Area;
+            vm.Address = realEstate.Address;
+            vm.RoomNumber = realEstate.RoomNumber;
+            vm.BuildingType = realEstate.BuildingType;
+            vm.CreatedAt = realEstate.CreatedAt;
+            vm.ModifiedAt = realEstate.ModifiedAt;
 
             return View(vm);
         }
@@ -153,12 +146,7 @@ namespace ShopTARpe25.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
-            var result = await _realEstateServices.Delete(id);
-
-            if (result == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            await _realEstateServices.Delete(id);
 
             return RedirectToAction(nameof(Index));
         }

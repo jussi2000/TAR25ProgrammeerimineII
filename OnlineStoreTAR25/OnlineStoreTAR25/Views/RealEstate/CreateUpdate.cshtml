@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ShopTARpe25.Models.RealEstate.RealEstateCreateUpdateViewModel
+
 @{
+    var isUpdate = Model.Id.HasValue;
 }
+
+<div class="page-header">
+    <h2>@(isUpdate ? "Update real estate" : "New real estate")</h2>
+</div>
+
+<form method="post" class="card-soft">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreatedAt" />
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Address" class="form-label"></label>
+            <input asp-for="Address" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="BuildingType" class="form-label"></label>
+            <input asp-for="BuildingType" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Area" class="form-label"></label>
+            <input asp-for="Area" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="RoomNumber" class="form-label"></label>
+            <input asp-for="RoomNumber" class="form-control" />
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <div class="d-flex gap-2">
+        <input asp-action="@(isUpdate ? "Update" : "Create")" asp-controller="RealEstate" type="submit"
+               class="btn btn-primary" value="@(isUpdate ? "Save changes" : "Create")" />
+        <a asp-action="Index" asp-controller="RealEstate" class="btn btn-outline-secondary">Back to list</a>
+    </div>
+</form>
