@@ -2,6 +2,7 @@ using AspNetCoreGeneratedDocument;
 using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 
 namespace OnlineStoreTAR25

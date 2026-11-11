@@ -1,8 +1,7 @@
 ﻿@model ShopTARpe25.Models.RealEstate.RealEstateDetailsViewModel
 
 <div class="page-header">
-    <h2>@Model.Address</h2>
-    <a asp-action="Index" class="btn btn-outline-secondary">&larr; Back to list</a>
+    <h2>Details</h2>
 </div>
 
 <div class="card-soft">
@@ -15,9 +14,13 @@
         <dd class="col-sm-9">@Model.RoomNumber</dd>
         <dt class="col-sm-3">Building type</dt>
         <dd class="col-sm-9">@Model.BuildingType</dd>
-        <dt class="col-sm-3">Created</dt>
+        <dt class="col-sm-3">Created at</dt>
         <dd class="col-sm-9">@Model.CreatedAt?.ToString("dd.MM.yyyy HH:mm")</dd>
-        <dt class="col-sm-3">Modified</dt>
+        <dt class="col-sm-3">Modified at</dt>
         <dd class="col-sm-9">@Model.ModifiedAt?.ToString("dd.MM.yyyy HH:mm")</dd>
     </dl>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to list</a>
 </div>

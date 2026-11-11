@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
-using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 
 namespace ShopTARpe25.ApplicationServices.Services
@@ -27,17 +27,40 @@ namespace ShopTARpe25.ApplicationServices.Services
             domain.CreatedAt = DateTime.Now;
             domain.ModifiedAt = DateTime.Now;
 
-             _context.RealEstates.Update(domain);
+            await _context.RealEstates.AddAsync(domain);
             await _context.SaveChangesAsync();
 
             return domain;
         }
+
         public async Task<RealEstate> DetailAsync(Guid id)
         {
             var result = await _context.RealEstates
-                .FirstOrDefaultAsync(x=> x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
+        }
+
+        public async Task<RealEstate> Update(RealEstateDto dto)
+        {
+            var domain = await _context.RealEstates
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            if (domain == null)
+            {
+                return null;
+            }
+
+            domain.Area = dto.Area;
+            domain.Address = dto.Address;
+            domain.RoomNumber = dto.RoomNumber;
+            domain.BuildingType = dto.BuildingType;
+            domain.ModifiedAt = DateTime.Now;
+
+            _context.RealEstates.Update(domain);
+            await _context.SaveChangesAsync();
+
+            return domain;
         }
 
         public async Task<RealEstate> Delete(Guid id)
@@ -45,13 +68,20 @@ namespace ShopTARpe25.ApplicationServices.Services
             var result = await _context.RealEstates
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            await _context.RealEstates
-                .Where(x => x.Id == id)
-                .ExecuteDeleteAsync();
+            if (result == null)
+            {
+                return null;
+            }
 
+            _context.RealEstates.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public async Task<List<RealEstate>> GetAll()
+        {
+            return await _context.RealEstates.ToListAsync();
         }
     }
 }
