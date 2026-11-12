@@ -11,11 +11,12 @@ namespace ShopTARpe25.Data
             : base(options)
         {
         }
-        //teha DbSet, et saaks andmebaasi kasutada
-        //nimega Spaceship
+        //siia tulevad kõik domainid panna
         public DbSet<Spaceship> Spaceships { get; set; }
         public DbSet<FileToApi> FileToApis { get; set; }
         public DbSet<RealEstate> RealEstates { get; set; }
+        public DbSet<FileToDatabase> FileToDatabases { get; set; }
+
 
     }
 }
