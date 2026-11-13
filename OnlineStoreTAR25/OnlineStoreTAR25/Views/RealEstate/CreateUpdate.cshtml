@@ -29,6 +29,21 @@
             <label asp-for="RoomNumber" class="form-label"></label>
             <input asp-for="RoomNumber" class="form-control" />
         </div>
+        <div class="col-sm-10">
+            <label asp-for="Files" class="form-label"></label>
+            <input asp-for="Files" class="form-control" type="file" multiple />
+        </div>
+    </div>
+
+
+    <div>
+        @foreach (var images in Model.Image)
+        {
+            <partial name="_images" model="images" />
+            <partial name="_Images" model="images" />
+            <input asp-action="removeImage" asp-controller="spaceship" asp-route-imageId="@images.ImageId"
+                   type="submit" class="btn btn-danger" value="Remove Image" />
+        }
     </div>
 
     <hr class="my-4" />
