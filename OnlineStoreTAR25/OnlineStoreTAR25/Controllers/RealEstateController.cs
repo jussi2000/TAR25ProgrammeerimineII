@@ -1,17 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
+using ShopTARpe25.Data;
 using ShopTARpe25.Models.RealEstate;
 
 namespace ShopTARpe25.Controllers
 {
     public class RealEstateController : Controller
     {
+        private readonly ShopTARpe25Context _context;
         private readonly IRealEstateServices _realEstateServices;
 
-        public RealEstateController(IRealEstateServices realEstateServices)
+        public RealEstateController
+            (
+            IRealEstateServices realEstateServices,
+            ShopTARpe25Context context
+            )
         {
             _realEstateServices = realEstateServices;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +83,8 @@ namespace ShopTARpe25.Controllers
             {
                 return NotFound();
             }
+
+            RealEstateImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new RealEstateDetailsViewModel();
 
@@ -158,6 +169,21 @@ namespace ShopTARpe25.Controllers
             await _realEstateServices.Delete(id);
 
             return RedirectToAction(nameof(Index));
+        }
+        private async Task<RealEstateImageViewModel[]> FileFromDatabase(Guid id)
+        {
+            var result = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == id)
+                .Select(y => new RealEstateImageViewModel
+                {
+                    ImageId = y.Id,
+                    RealEstateId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}",Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
+
+            return result;
         }
     }
 }

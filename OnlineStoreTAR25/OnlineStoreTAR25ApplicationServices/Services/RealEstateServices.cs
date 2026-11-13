@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
+using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 
@@ -9,10 +10,17 @@ namespace ShopTARpe25.ApplicationServices.Services
     public class RealEstateServices : IRealEstateServices
     {
         private readonly ShopTARpe25Context _context;
+        private readonly IFileServices _fileServices;
 
-        public RealEstateServices(ShopTARpe25Context context)
+        public RealEstateServices
+            (
+            ShopTARpe25Context context,
+            IFileServices fileServices
+            )
         {
             _context = context;
+            _fileServices = fileServices;
+
         }
 
         public async Task<RealEstate> Create(RealEstateDto dto)
@@ -26,6 +34,12 @@ namespace ShopTARpe25.ApplicationServices.Services
             domain.BuildingType = dto.BuildingType;
             domain.CreatedAt = DateTime.Now;
             domain.ModifiedAt = DateTime.Now;
+
+            //kui ankeedis on pildid, siis kutsu faili salvestamine välja
+            if(dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, domain);
+            }
 
             await _context.RealEstates.AddAsync(domain);
             await _context.SaveChangesAsync();

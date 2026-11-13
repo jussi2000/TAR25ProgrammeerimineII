@@ -183,35 +183,6 @@ namespace ShopTAR25.Controllers
 
             return View("CreateUpdate",vm);
         }
-        [HttpPost]
-        public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
-        {
-            var dto = new SpaceshipDto
-            {
-                Id = vm.Id,
-                Name = vm.Name,
-                Classification = vm.Classification,
-                BuildDate = vm.BuildDate,
-                EnginePower = vm.EnginePower,
-                Crew = vm.Crew,
-                Files = vm.Files,
-                FileToApiDtos = vm.Images
-                    .Select(file => new FileToApiDto
-                    {
-                        Id = file.ImageId,
-                        ExistingFilePath = file.FilePath,
-                        SpaceshipId = file.SpaceshipId
-                    }).ToArray()
-            };
-            var result = await _spaceshipService.Update(dto);
-
-            if (result == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            return RedirectToAction(nameof(Index));
-
-        }
 
         //DELETE
         [HttpGet]

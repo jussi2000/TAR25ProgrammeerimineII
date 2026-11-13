@@ -20,12 +20,6 @@
         <dd class="col-sm-9">@Model.ModifiedAt?.ToString("dd.MM.yyyy HH:mm")</dd>
     </dl>
 
-    @foreach (var images in Model.Images)
-    {
-        <partial name="_Images" model="images" />
-        <br />
-    }
-
     <form asp-action="DeleteConfirmation" class="mt-4 d-flex gap-2">
         <input type="hidden" asp-for="Id" />
         <button type="submit" class="btn btn-danger">Delete</button>
