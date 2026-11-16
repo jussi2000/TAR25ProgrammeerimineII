@@ -1,56 +1,71 @@
 ﻿@model ShopTARpe25.Models.RealEstate.RealEstateCreateUpdateViewModel
 
-@{
-    var isUpdate = Model.Id.HasValue;
+@if (Model.Id.HasValue)
+{
+    <h1>RealEstate Update</h1>
+}
+else
+{
+    <h1>RealEstate Create</h1>
 }
 
-<div class="page-header">
-    <h2>@(isUpdate ? "Update real estate" : "New real estate")</h2>
-</div>
+<div>
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="CreatedAt" type="hidden" />
+        <input asp-for="ModifiedAt" type="hidden" />
 
-<form method="post" class="card-soft">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="CreatedAt" />
+        <div class="form-group">
+            <label asp-for="Area" class="control-label"></label>
+            <input asp-for="Area" class="form-control" />
+            <span asp-validation-for="Area" class="text-danger"></span>
+        </div>
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label asp-for="Address" class="form-label"></label>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
             <input asp-for="Address" class="form-control" />
         </div>
-        <div class="col-md-6">
-            <label asp-for="BuildingType" class="form-label"></label>
+
+        <div class="form-group">
+            <label asp-for="RoomNumber" class="control-label"></label>
+            <input asp-for="RoomNumber" class="form-control" />
+            <span asp-validation-for="RoomNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BuildingType" class="control-label"></label>
             <input asp-for="BuildingType" class="form-control" />
         </div>
-        <div class="col-md-6">
-            <label asp-for="Area" class="form-label"></label>
-            <input asp-for="Area" class="form-control" />
+
+        <div class="form-group">
+            <label asp-for="Files" class="control-label"></label>
+            <input class="form-control" asp-for="Files" multiple type="file" />
         </div>
-        <div class="col-md-6">
-            <label asp-for="RoomNumber" class="form-label"></label>
-            <input asp-for="RoomNumber" class="form-control" />
-        </div>
+
         <div class="col-sm-10">
             <label asp-for="Files" class="form-label"></label>
             <input asp-for="Files" class="form-control" type="file" multiple />
         </div>
-    </div>
 
+        <div>
+            @foreach (var images in Model.Image)
+                {
+                    <partial name="_Images" model="images"/>
+                }
+        </div>
 
-    <div>
-        @foreach (var images in Model.Image)
+        <br />
+
+        @if (Model.Id.HasValue)
         {
-            <partial name="_images" model="images" />
-            <partial name="_Images" model="images" />
-            <input asp-action="removeImage" asp-controller="spaceship" asp-route-imageId="@images.ImageId"
-                   type="submit" class="btn btn-danger" value="Remove Image" />
+            <input asp-action="update" asp-controller="realEstate" type="submit" class="btn btn-success" value="Update" />
         }
-    </div>
+        else
+        {
+            <input asp-action="create" asp-controller="realEstate" type="submit" class="btn btn-success" value="Create" />
+        }
 
-    <hr class="my-4" />
-
-    <div class="d-flex gap-2">
-        <input asp-action="@(isUpdate ? "Update" : "Create")" asp-controller="RealEstate" type="submit"
-               class="btn btn-primary" value="@(isUpdate ? "Save changes" : "Create")" />
         <a asp-action="Index" asp-controller="RealEstate" class="btn btn-outline-secondary">Back to list</a>
-    </div>
-</form>
+    </form>
+</div>
