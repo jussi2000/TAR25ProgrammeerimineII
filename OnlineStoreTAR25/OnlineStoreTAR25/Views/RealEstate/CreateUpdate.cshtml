@@ -43,10 +43,6 @@ else
             <input class="form-control" asp-for="Files" multiple type="file" />
         </div>
 
-        <div class="col-sm-10">
-            <label asp-for="Files" class="form-label"></label>
-            <input asp-for="Files" class="form-control" type="file" multiple />
-        </div>
 
         <div>
             @foreach (var images in Model.Image)

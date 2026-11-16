@@ -91,18 +91,18 @@ namespace ShopTARpe25.Controllers
                 return NotFound();
             }
 
-            RealEstateImageViewModel[] images = await FileFromDatabase(id);
+           RealEstateImageViewModel[] images = await FileFromDatabase(id);
 
-            var vm = new RealEstateCreateUpdateViewModel
-            {
-                Id = result.Id,
-                Area = result.Area,
-                Address = result.Address,
-                RoomNumber = result.RoomNumber,
-                BuildingType = result.BuildingType,
-                CreatedAt = result.CreatedAt,
-                ModifiedAt = result.ModifiedAt,
-            };
+            var vm = new RealEstateCreateUpdateViewModel();
+
+            vm.Id = result.Id;
+            vm.Area = result.Area;
+            vm.Address = result.Address;
+            vm.RoomNumber = result.RoomNumber;
+            vm.BuildingType = result.BuildingType;
+            vm.CreatedAt = result.CreatedAt;
+            vm.ModifiedAt = result.ModifiedAt;
+            vm.Image.AddRange(images);
 
             return View("CreateUpdate", vm);
         }
