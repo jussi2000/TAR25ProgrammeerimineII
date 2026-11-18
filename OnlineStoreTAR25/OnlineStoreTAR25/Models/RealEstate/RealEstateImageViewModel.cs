@@ -7,5 +7,6 @@
         public byte[]? ImageData { get; set; }
         public string? Image { get; set; }
         public Guid? RealEstateId { get; set; }
+
     }
 }

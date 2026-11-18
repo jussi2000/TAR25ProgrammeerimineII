@@ -9,8 +9,10 @@ namespace ShopTARpe25.Models.RealEstate
         public string? Address { get; set; }
         public int RoomNumber { get; set; }
         public string? BuildingType { get; set; }
-        public List<ImageViewModel> Images { get; set; }
-              = new List<ImageViewModel>();
+
+        public List<RealEstateImageViewModel> Images { get; set; }
+              = new List<RealEstateImageViewModel>();
+
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }
