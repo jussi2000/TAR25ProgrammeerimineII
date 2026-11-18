@@ -14,18 +14,18 @@ namespace ShopTARpe25.Controllers
     {
         private readonly ShopTARpe25Context _context;
         private readonly IRealEstateServices _realEstateServices;
-        private readonly IFileServices _fileServices;
+        private readonly IFileServices _fileService;
 
         public RealEstateController
             (
                 ShopTARpe25Context context,
                 IRealEstateServices realEstateServices,
-                IFileServices fileServices
+                IFileServices fileService
             )
         {
             _context = context;
             _realEstateServices = realEstateServices;
-            _fileServices = fileServices;
+            _fileService = fileService;
         }
 
         public IActionResult Index()
@@ -128,7 +128,16 @@ namespace ShopTARpe25.Controllers
                 RoomNumber = vm.RoomNumber,
                 BuildingType = vm.BuildingType,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                ModifiedAt = vm.ModifiedAt,
+                Files = vm.Files,
+                Image = vm.Image
+                    .Select(x => new FileToDatabaseDto
+                    {
+                        Id = x.ImageId,
+                        ImageData = x.ImageData,
+                        ImageTitle = x.ImageTitle,
+                        RealEstateId = x.RealEstateId
+                    }).ToArray()
             };
 
             var result = await _realEstateServices.Update(dto);
@@ -233,7 +242,9 @@ namespace ShopTARpe25.Controllers
                 Id = vm.ImageId
             };
 
-            var image = await _fileservices.RemoveImageFromDatabase(dto);
+            var image = await _fileService.RemoveImageFromDatabase(dto);
+
+            var realEstateId = image.RealEstateId;
 
             if (image == null)
             {
