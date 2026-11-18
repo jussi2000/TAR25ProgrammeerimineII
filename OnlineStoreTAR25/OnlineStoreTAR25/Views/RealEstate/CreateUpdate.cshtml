@@ -43,18 +43,17 @@ else
             <input class="form-control" asp-for="Files" multiple type="file" />
         </div>
 
-
         <div>
             @foreach (var images in Model.Image)
             {
-                <partial name="_images" model="images" />
+                <partial name="_Images" model="images" />
                 <input asp-action="removeImage" asp-controller="realEstate" asp-route-imageId="@images.ImageId"
                        type="submit" class="btn btn-danger" value="Remove Image" />
             }
         </div>
 
-
-        <br />
+        <br>
+        <hr />
 
         @if (Model.Id.HasValue)
         {
@@ -65,6 +64,6 @@ else
             <input asp-action="create" asp-controller="realEstate" type="submit" class="btn btn-success" value="Create" />
         }
 
-        <a asp-action="Index" asp-controller="RealEstate" class="btn btn-outline-secondary">Back to list</a>
+        <a asp-action="Index" asp-controller="realEstate" class="btn btn-outline-secondary">Back to list</a>
     </form>
 </div>

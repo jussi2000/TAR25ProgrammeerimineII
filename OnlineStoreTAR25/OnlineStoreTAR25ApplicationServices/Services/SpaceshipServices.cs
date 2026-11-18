@@ -4,6 +4,7 @@ using Microsoft.Identity.Client;
 using ShopTARpe25.Core.Domain;
 using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.Serviceinterface;
+using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 
 namespace ShopTARpe25.ApplicationServices.Services

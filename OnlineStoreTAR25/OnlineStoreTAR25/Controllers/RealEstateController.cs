@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.Dto;
-using ShopTARpe25.Core.Serviceinterface;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 using ShopTARpe25.Models.RealEstate;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ShopTARpe25.Controllers
@@ -14,18 +12,19 @@ namespace ShopTARpe25.Controllers
     {
         private readonly ShopTARpe25Context _context;
         private readonly IRealEstateServices _realEstateServices;
-        private readonly IFileServices _fileService;
+
+        private readonly IFileServices _fileServices;
 
         public RealEstateController
             (
                 ShopTARpe25Context context,
                 IRealEstateServices realEstateServices,
-                IFileServices fileService
+                IFileServices fileServices
             )
         {
             _context = context;
             _realEstateServices = realEstateServices;
-            _fileService = fileService;
+            _fileServices = fileServices;
         }
 
         public IActionResult Index()
@@ -140,17 +139,16 @@ namespace ShopTARpe25.Controllers
                     }).ToArray()
             };
 
-            var realEstate = await _realEstateServices.Update(dto);
+            var result = await _realEstateServices.Update(dto);
+
+            var realEstate = result.Id;
 
             if (result == null)
             {
                 ModelState.AddModelError("", "Real estate update failed.");
                 return View(nameof(Index));
             }
-            return RedirectToAction(nameof(Update), new 
-            { 
-                id = realEstate 
-            });
+            return RedirectToAction(nameof(Update), new { id = realEstate });
         }
 
         [HttpGet]
@@ -245,7 +243,7 @@ namespace ShopTARpe25.Controllers
                 Id = vm.ImageId
             };
 
-            var image = await _fileService.RemoveImageFromDatabase(dto);
+            var image = await _fileServices.RemoveImageFromDatabase(dto);
 
             var realEstateId = image.RealEstateId;
 
@@ -254,7 +252,7 @@ namespace ShopTARpe25.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Update), new { id = vm.RealEstateId });
+            return RedirectToAction(nameof(Update), new { id = realEstateId });
         }
     }
 }
