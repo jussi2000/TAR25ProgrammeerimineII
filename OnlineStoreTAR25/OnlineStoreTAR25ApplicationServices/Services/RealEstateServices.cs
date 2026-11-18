@@ -87,10 +87,10 @@ namespace ShopTARpe25.ApplicationServices.Services
             var result = await _context.RealEstates
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (result == null)
-            {
-                return null;
-            }
+            var images = await _context.FileToDatabases
+                .Where(x => x.RealEstateId == id)
+                .Select(y => new FileToDatabaseDto
+
 
             _context.RealEstates.Remove(result);
             await _context.SaveChangesAsync();
@@ -98,9 +98,5 @@ namespace ShopTARpe25.ApplicationServices.Services
             return result;
         }
 
-        public async Task<List<RealEstate>> GetAll()
-        {
-            return await _context.RealEstates.ToListAsync();
-        }
     }
 }

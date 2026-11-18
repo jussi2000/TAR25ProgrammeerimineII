@@ -140,14 +140,17 @@ namespace ShopTARpe25.Controllers
                     }).ToArray()
             };
 
-            var result = await _realEstateServices.Update(dto);
+            var realEstate = await _realEstateServices.Update(dto);
 
             if (result == null)
             {
                 ModelState.AddModelError("", "Real estate update failed.");
                 return View(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Update), new 
+            { 
+                id = realEstate 
+            });
         }
 
         [HttpGet]
