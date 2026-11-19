@@ -43,9 +43,12 @@ else
             <input class="form-control" asp-for="Files" multiple type="file" />
         </div>
 
+        <hr>
+
         <div>
             @foreach (var images in Model.Image)
             {
+                <br>
                 <partial name="_Images" model="images" />
                 <input asp-action="removeImage" asp-controller="realEstate" asp-route-imageId="@images.ImageId"
                        type="submit" class="btn btn-danger" value="Remove Image" />
