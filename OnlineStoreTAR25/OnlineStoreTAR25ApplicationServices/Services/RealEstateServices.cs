@@ -93,7 +93,7 @@ namespace ShopTARpe25.ApplicationServices.Services
                     RealEstateId = y.RealEstateId,
                 }).ToArrayAsync();
 
-            await _fileServices.RemoveImageFromDatabase(images);
+            await _fileServices.RemoveImagesFromDatabase(images);
             await _context.RealEstates
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
