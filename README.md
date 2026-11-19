@@ -6,7 +6,7 @@
 
 DbContext ühendab projekti andmebaasiga. Selle kaudu saab andmebaasist andmeid lugeda ja sinna salvestada. Tabelid on DbSet-idena ning muudatused salvestatakse SaveChanges() abil.
 
-3. Miks ei ole hea paigutada kõiki andmebaasipäringuid otse kasutajaliidese koodi?
+2. Miks ei ole hea paigutada kõiki andmebaasipäringuid otse kasutajaliidese koodi?
 - Kood läheb segaseks, sest kasutajaliides peaks ainult andmeid näitama.
 - Sama päringut tuleb kirjutada mitmes kohas, ehk see muudab muudatused tülikaks.
 - Andmebaasi muutmisel peab muutma ka kasutajaliidese koodi.
