@@ -148,5 +148,21 @@ namespace ShopTARpe25.ApplicationServices.Services
 
             return image;
         }
+
+        //kui kustutad mitu pilti, siis peab olema massiivis ehk []
+        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var image = await _context.FileToDatabases
+                    .Where(x => x.Id == dto.Id)
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+                _context.FileToDatabases.Remove(image);
+                await _context.SaveChangesAsync();
+            }
+
+            return null;
+        }
     }
 }
