@@ -13,6 +13,6 @@ DbContext ühendab projekti andmebaasiga. Selle kaudu saab andmebaasist andmeid 
 - Koodi on raske testida.
 
 3. Millisesse kihti paigutaksid andmebaasiga suhtlemise MVC- või VIPER-arhitektuuris?
-4. 
+
 MVC-s paigutaksin andmebaasiga suhtlemise Modelisse. Controller küsib andmed Modelilt ja annab need Vaatele, View ainult kuvab.
 Põhjendus: Nii on kasutajaliides andmebaasist eraldatud, kood on selgem ning seda on lihtsam hooldada ja testida.
