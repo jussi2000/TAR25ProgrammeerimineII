@@ -12,7 +12,6 @@ namespace ShopTARpe25.Controllers
     {
         private readonly ShopTARpe25Context _context;
         private readonly IRealEstateServices _realEstateServices;
-
         private readonly IFileServices _fileServices;
 
         public RealEstateController

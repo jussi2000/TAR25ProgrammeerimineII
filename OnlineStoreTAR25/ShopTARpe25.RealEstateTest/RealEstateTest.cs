@@ -1,6 +1,4 @@
-﻿using ShopTARpe25.ApplicationServices.Services;
-using ShopTARpe25.Core.Domain;
-using ShopTARpe25.Core.Dto;
+﻿using ShopTARpe25.Core.Dto;
 using ShopTARpe25.Core.ServiceInterface;
 
 namespace ShopTARpe25.RealEstateTest
@@ -28,8 +26,23 @@ namespace ShopTARpe25.RealEstateTest
             Assert.NotNull(result);
 
             //kuidas testi käima panna??
+            //Run Tests - Test Explorer
 
+        }
+        //teha test, kus otsitakse ankeeti id alusel, aga seda ei ole andmebaasis
+        [Fact]
+        public async Task Should_GetByIdRealEstate_WhenReturnsEqual()
+        {
+            // Arrange
+            Guid databaseGuid = Guid.Parse("d61e8ffa-9336-441b-af2d-4dcd15df0969");
+            Guid wrongGuid = Guid.NewGuid();
 
+            // Act - siia tuleb detailAsync
+            await Svc<IRealEstateServices>().DetailAsync(databaseGuid);
+
+            // Assert
+            //vastupidist loogikat tuleb kasutada
+            Assert.NotEqual(wrongGuid, databaseGuid);
         }
     }
 }

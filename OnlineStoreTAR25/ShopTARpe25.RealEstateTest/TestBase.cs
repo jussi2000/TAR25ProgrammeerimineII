@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ShopTARpe25.ApplicationServices.Services;
 using ShopTARpe25.Core.ServiceInterface;
 using ShopTARpe25.Data;
 using ShopTARpe25.RealEstateTest.Macros;
+using ShopTARpe25.RealEstateTest.Mock;
 
 
 namespace ShopTARpe25.RealEstateTest
@@ -28,6 +30,11 @@ namespace ShopTARpe25.RealEstateTest
         {
             // Kui küsitakse IRealEstateServices-i, kasutatakse RealEstateServices-i.
             services.AddScoped<IRealEstateServices, RealEstateServices>();
+
+            //miks pidi lisama kaks service'it juurde, kuigi me tahame ainult testida RealEstate CRUD'i?
+            //kuna see oli seotud failide lisamisega ja failide lisamine omakorda oli seoses IHostEnviroment'iga
+            services.AddScoped<IFileServices, FileServices>();
+            services.AddScoped<IHostEnvironment, MockIHostEnviroment>();
 
             // Registreerib andmebaasi konteksti
             services.AddDbContext<ShopTARpe25Context>(x =>
