@@ -150,6 +150,7 @@ namespace ShopTARpe25.RealEstateTest
         //kasutame ankeeti kus kõik andmed on null ja
         //tuleb kasutada create'i ja update'i
         //iseseisev töö
+        //ei tööta hetkel
         [Fact]
         public async Task Should_CreateUpdateDeleteRealEstate()
         {
