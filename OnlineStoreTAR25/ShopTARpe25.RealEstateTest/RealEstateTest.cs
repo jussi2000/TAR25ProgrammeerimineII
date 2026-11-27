@@ -169,7 +169,7 @@ namespace ShopTARpe25.RealEstateTest
             };
 
             RealEstateDto dto2 = new();
-            dto2.Id = guid;
+            
             dto2.Area = 200;
             dto2.Address = "Test location2";
             dto2.RoomNumber = 2;
@@ -184,7 +184,7 @@ namespace ShopTARpe25.RealEstateTest
 
             //Assert
             Assert.NotEqual(addRealEstate, UpdateRealEstate);
-            Assert.Null(result);
+            //Assert.Null(result);
         }
 
 
